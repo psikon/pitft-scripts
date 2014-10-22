@@ -1,44 +1,66 @@
-import pygame 
+#!/usr/bin/env python
+
 import sys, os, time
-from pygame.locals import * 
-import menu
-import controls
+from argparse import ArgumentParser
+import pygame
+from src.hardware import hardware
+from src.startscreen import MainMenu
+from src.bookselector import BookSelector
+from src.play import Player
+from src.info import InfoScreen
 
-def loadImage(filename, colorkey = None):
-	# load picture
-    image = pygame.image.load(filename)
-    # load picture with or without alpha channel
-    if image.get_alpha() == None:
-        image = image.convert()
-    else:
-        image = image.convert_alpha()
-    # set colorkey
-    if colorkey is not None:
-        if colorkey is -1:
-            colorkey = image.get_at((0,0))
-        image.set_colorkey(colorkey, pygame.RLEACCEL)
-    # return loaded image
-    return image
+# setup argument parser
+parser = ArgumentParser(description = '%s -- audiobook interface for raspberry pi' % 
+                           (os.path.basename(sys.argv[0])),
+                          	epilog = 'created by Philipp Sehnert',
+                          	add_help = True)
+parser.add_argument('--version', action = 'version', version = '%s 1.0' % 
+                     	(os.path.basename(sys.argv[0])))
+parser.add_argument('-pi', dest = 'pi', default = False, 
+  						action = 'store_true', help = 'choose interface')
+# parse cmd arguments
+args = parser.parse_args()
+# initialize hardware
+pitft = hardware(args.pi)
 
-def init():
-    pygame.init()
-    screen = pygame.display.set_mode((320,240))
-    screen.blit(loadImage("images/bg.jpg"), (0, 0))
-    pygame.display.update()
+def last_played():
+    player = Player(pitft.getScreen(), "Continue")
+    player.run()
+
+def information():
+	info = InfoScreen()
+	sys.exit()
 
 
-def event_loop():
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                sys.exit()
+def play_window(string):
+	player = Player(pitft.getScreen(), string)
+	player.run()
+
+def book_selector():
+	# create inventory
+	books = dict()
+	for picture in os.listdir("./music"):
+		if picture.endswith(".jpg"):
+			for audio in os.listdir("./music"):
+				if audio.endswith('.txt'):
+					if os.path.splitext(picture)[0] in os.path.splitext(audio)[0]:
+						books.__setitem__(picture,audio)
+
+	bs = BookSelector(pitft.getScreen(), books, play_window)
+	bs.run()
+
 
 def main(): 
-	init()
-	event_loop()
+  	
+	# register main menu functions
+	funcs = {'Continue': last_played,
+			'Select Book': book_selector,
+			'Information': information}
+	# create main menu object
+	main_menu = MainMenu(pitft.getScreen(),
+		['Continue','Select Book', 'Information'], funcs)
+	# start main menu
+	main_menu.run()
 
-# Check, if this is the main file 
 if __name__ == '__main__': 
 	sys.exit(main())

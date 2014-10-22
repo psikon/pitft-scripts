@@ -8,11 +8,14 @@ Description
 
 # imports
 import sys, os
+import pygame
+from src.graphics import Graphics
 
-class menu:
 
-	def __init__():
-		pass
+class InfoScreen:
 
-	def __del__():
-		pass
+  def __init__(self):
+    pass
+
+  def __del__(self):
+    pass
