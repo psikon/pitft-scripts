@@ -17,7 +17,7 @@ BLACK = (0, 0, 0)
 BLUE = (0,0,139)
 
 class MenuItem(pygame.font.Font):
-    def __init__(self, text, font = None, font_size = 30, font_color = WHITE, 
+    def __init__(self, text, font = None, font_size = 60, font_color = WHITE, 
     			(pos_x, pos_y) = (0, 0)):
  		# init font
         pygame.font.Font.__init__(self, font, font_size)
@@ -44,21 +44,21 @@ class MenuItem(pygame.font.Font):
 
 class MainMenu():
 
-    def __init__(self, screen, items, funcs, font = None, font_size = 45,
-                 font_color = WHITE):
+    def __init__(self, screen, items, funcs, hardware_instance):
     	# declare important variables
         self.screen = screen
         self.scr_width = self.screen.get_rect().width
         self.scr_height = self.screen.get_rect().height
         self.clock = pygame.time.Clock()
         self.graphics = Graphics()
+    	self.hardware = hardware_instance
         self.funcs = funcs
         # create empty menu stack
         self.items = []
         # generate menu items
         for index, item in enumerate(items):
         	# init new menu item
-            menu_item = MenuItem(item, font, font_size, font_color)
+            menu_item = MenuItem(item)
             # t_h: total height of text block
             t_h = len(items) * menu_item.height
             # set postion of new item
@@ -83,16 +83,16 @@ class MainMenu():
             self.cur_item = 0
         else:
             # Find the chosen item
-            if key == pygame.K_LEFT and \
+            if key == self.hardware.LEFT and \
                     self.cur_item > 0:
                 self.cur_item -= 1
-            elif key == pygame.K_LEFT and \
+            elif key == self.hardware.LEFT and \
                     self.cur_item == 0:
                 self.cur_item = len(self.items) - 1
-            elif key == pygame.K_RIGHT and \
+            elif key == self.hardware.RIGHT and \
                     self.cur_item < len(self.items) - 1:
                 self.cur_item += 1
-            elif key == pygame.K_RIGHT and \
+            elif key == self.hardware.RIGHT and \
                     self.cur_item == len(self.items) - 1:
                 self.cur_item = 0
  

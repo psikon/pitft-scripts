@@ -51,14 +51,13 @@ def book_selector():
 
 
 def main(): 
-  	
 	# register main menu functions
 	funcs = {'Continue': last_played,
 			'Select Book': book_selector,
 			'Information': information}
 	# create main menu object
 	main_menu = MainMenu(pitft.getScreen(),
-		['Continue','Select Book', 'Information'], funcs)
+		['Continue','Select Book', 'Information'], funcs, pitft)
 	# start main menu
 	main_menu.run()
 
