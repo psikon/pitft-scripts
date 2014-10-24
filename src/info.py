@@ -64,27 +64,23 @@ class InfoScreen:
 			ip = 'not connected'
 		return ip
 
-	def book_info(self):
-		'''counting number of audio files in music folder'''
-		count = 0
-		for book in os.listdir(self.folder):
-			# find all files with specific audio ending
-			if book.endswith(".txt"):
-				count += 1
-		return count 
-
 	def run(self):
 		'''run function for display information screen'''
 		mainloop = True
 		# use infinity loop for display
 		while mainloop:
 			# Limit frame speed to 30 FPS
-			self.clock.tick(30)
+			self.clock.tick(60)
 			for event in pygame.event.get():
 				# draw interface to diplay
 				self.graphics.info_interface(self.screen, self.cpu_info(), 
 				self.ram_info(), self.hdd_info("/"), 
-				self.ip_info(), self.book_info())
+				self.ip_info())
+				click_pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
 				if event.type == pygame.KEYDOWN and event.key == pygame.K_BACKSPACE:
 					mainloop = False
+				if 10 <= click_pos[0] <= 55 and 190 <= click_pos[1] <= 235:
+					mainloop = False
+				if 265 <= click_pos[0] <= 310 and 190 <= click_pos[1] <= 235:
+					sys.exit()
 			pygame.display.flip()

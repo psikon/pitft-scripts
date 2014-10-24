@@ -74,8 +74,7 @@ def main():
 			'Select Book': book_selector,
 			'Information': information}
 	# create main menu object
-	main_menu = MainMenu(pitft.getScreen(),
-		['Continue','Select Book', 'Information'], funcs, pitft)
+	main_menu = MainMenu(pitft.getScreen(), ['Last Played','Select Book', 'Information'], funcs, pitft)
 	# start main menu
 	main_menu.run()
 

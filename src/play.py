@@ -15,6 +15,7 @@ from graphics import Graphics
 
 
 WHITE = (255, 255, 255)
+YELLOW = (255, 255, 0)
 
 
 class AudioBook(pygame.font.Font):
@@ -50,6 +51,38 @@ class Player:
     def __del__(self):
       pass
 
+    def on_key(self, event, index):
+      # scroll to left
+        if event.key == pygame.K_LEFT:
+          index -=1
+          # make negative index to max index to start new round
+          if index == -1:
+            index = len(self.books) -1
+        # scroll to right
+        if event.key == pygame.K_RIGHT:
+          index = index + 1
+          # set max index to 0 for start new round 
+          if index >= len(self.books):
+            index = 0
+        # select item
+        if event.key == pygame.K_RETURN:
+          self.function(self.books[index].getName())
+        return(index)
+
+    def on_click(self):
+      click_pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
+      #now check to see if button 1 was pressed
+      if 10 <= click_pos[0] <= 55 and 190 <= click_pos[1] <= 235:
+        return False
+      #now check to see if button 2 was pressed        
+      if 65 <= click_pos[0] <= 110 and 190 <= click_pos[1] <= 235:
+        print "pause"
+      #now check to see if button 3 was pressed
+      if 120 <= click_pos[0] <= 160 and 190 <= click_pos[1] <= 235:
+        print "play"
+      return True
+
+
     def run(self):
       mainloop = True
       while mainloop:
@@ -57,12 +90,14 @@ class Player:
         self.clock.tick(30)
         self.graphics.player_interface(self.screen)
         self.graphics.TitleField(self.screen, self.book)
-        #self.graphics.make_button(self.screen, 'zuruek', 'images/previous.png', 20, 20, (255,255,255))
         for event in pygame.event.get():
-          
           if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_BACKSPACE:
               mainloop = False
+          if event.type == pygame.MOUSEBUTTONDOWN:
+            pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
+            pygame.draw.circle(self.screen, YELLOW, pos, 10, 0)
+            mainloop = self.on_click()
         pygame.display.flip()
 
  

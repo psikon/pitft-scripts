@@ -16,8 +16,8 @@ from graphics import Graphics
 # define colors for menu
 WHITE = (255, 255, 255)
 GREY = (64,64,64)
-BLACK = (0, 0, 0)
 BLUE = (0,0,139)
+YELLOW = (255, 255, 0)
 
 class MenuItem(pygame.font.Font):
     ''' class stroring informations for one menu item''' 
@@ -116,7 +116,18 @@ class MainMenu():
             text = self.items[self.cur_item].text
             self.funcs[text]()
 
- 
+    #define function that checks for mouse location
+    def on_click(self):
+        click_pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
+        #now check to see if button 1 was pressed
+        if 50 <= click_pos[0] <= 270 and 40 <= click_pos[1] <= 90:
+            self.funcs['Continue']()
+        #now check to see if button 2 was pressed
+        if 50 <= click_pos[0] <= 270 and 100 <= click_pos[1] <= 150:
+            self.funcs['Select Book']()
+        #now check to see if button 3 was pressed
+        if 50 <= click_pos[0] <= 270 and 160 <= click_pos[1] <= 210:
+            self.funcs['Information']()
  
     def run(self):
         '''run method for drawing the screen to dispay'''
@@ -129,13 +140,21 @@ class MainMenu():
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     self.set_keyboard_selection(event.key)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
+                    pygame.draw.circle(self.screen, YELLOW, pos, 10, 0)
+                    self.on_click()
  
             # draw the background
             self.screen.fill(GREY)
             self.screen.blit(self.graphics.loadImage("images/bg_alpha.png"),(0,0))
+            self.graphics.makeTextButton(self.screen, "Last Played", 50, 20, 220, 55,'Arial', 40)
+            self.graphics.makeTextButton(self.screen, "Select Book", 50, 90, 220, 55, 'Arial', 40)
+            self.graphics.makeTextButton(self.screen, "Information", 50, 160, 220, 55, 'Arial', 40)
             # draw menu items on screen
-            for item in self.items:
-                self.screen.blit(item.label, item.position)
+            #for item in self.items:
+            #    self.graphics.makeTextButton(self.screen, item.text, item.position[0], item.position[1])
+            #    #self.screen.blit(item.label, item.position)
             # update the screen
             pygame.display.flip()
 

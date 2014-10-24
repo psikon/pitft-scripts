@@ -24,20 +24,16 @@ class hardware:
 			if disp_no:
 				print "I'm running under X display = {0}".format(disp_no)
 			os.putenv('SDL_FBDEV', '/dev/fb1') 
+			# variables for touchscreen control
+			os.environ["SDL_MOUSEDEV"] = "/dev/input/touchscreen"
+			os.environ["SDL_MOUSEDRV"] = "TSLIB"
 			# Select frame buffer driver
 			# Make sure that SDL_VIDEODRIVER is set
 			driver = 'fbcon'
 			if not os.getenv('SDL_VIDEODRIVER'):
 				os.putenv('SDL_VIDEODRIVER', driver)
 			try:
-				#import RPi.GPIO as GPIO
-				#GPIO.setmode(GPIO.BCM)
-				#GPIO.setup(22,GPIO.IN)
-				#GPIO.setup(21,GPIO.IN)
-				#GPIO.setup(18,GPIO.IN)
-				#self.left = GPIO.input(22)
-				#self.right = GPIO.input(21)
-				#self.select = GPIO.input(18)
+
 				pygame.init()
 			except pygame.error:
 				print 'Driver: {0} failed.'.format(driver)

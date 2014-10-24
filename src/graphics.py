@@ -27,9 +27,16 @@ class Graphics:
     '''class containing drawing functions for interfaces'''
     def __init__(self):
         self.font = pygame.font.SysFont('Arial', 20)
+        pygame.mouse.set_visible(False)
 
     def __del__(self):
         pass
+
+    def getFont(self):
+        return self.font
+
+    def setFont(self, font, font_size):
+        self.font = pygame.font.SysFont(font, font_size)
 
     def loadImage(self, filename, colorkey = None):
         '''function for loading pictures with and without alpha channel'''
@@ -48,9 +55,16 @@ class Graphics:
         # return loaded image
         return image
 
-    def make_button(self, screen, text, image, xpo, ypo, colour):
-        screen.blit(self.font.render(text, True, GREY),(xpo,ypo))
-        pygame.draw.rect(screen, (xpo-5,ypo-5,110,35),1)
+    def makeTextButton(self, screen, text, posx, posy, width, height, font, font_size):
+        self.setFont(font, font_size)
+        screen.blit(self.font.render(text, True, WHITE), (posx, posy))
+        #pygame.draw.rect(screen, WHITE, (posx-5, posy-5, width , height), 1)
+
+    def makeImagebutton(self, screen, image, xpos, ypos, width, height):
+        # draw icon
+        screen.blit(pygame.transform.scale(image, (width, height)), (xpos, ypos))
+        # frame around icon
+        #pygame.draw.rect(screen, WHITE, (xpos, ypos, 31, 31), 1)
 
     def list_interface(self, screen):
         '''generate screen for book selector interface'''
@@ -62,9 +76,48 @@ class Graphics:
         right = self.loadImage(NEXT)
         select = self.loadImage(SELECT)
         # draw buttons to screen
-        screen.blit(pygame.transform.scale(left, (30,30)), (10,200))
-        screen.blit(pygame.transform.scale(right, (30,30)), (45,200))
-        screen.blit(pygame.transform.scale(select, (30,30)), (80,200))
+        self.makeImagebutton(screen, left, 10, 190, 45, 45)
+        self.makeImagebutton(screen, right, 65, 190, 45, 45)
+        self.makeImagebutton(screen, select, 120, 190, 45, 45)
+        return screen
+
+    def player_interface(self, screen):
+        '''generate the interface for the audio player'''
+        # create background
+        screen.fill(GREY)
+        screen.blit(self.loadImage(BG_IMG),(0,0))
+        # load images for buttons
+        back = self.loadImage(PREVIOUS)
+        pause = self.loadImage(PAUSE)
+        play = self.loadImage(PLAY)
+        # draw buttons to screen
+        self.makeImagebutton(screen, back, 10, 190, 45, 45)
+        self.makeImagebutton(screen, pause, 65, 190, 45, 45)
+        self.makeImagebutton(screen, play, 120, 190, 45, 45)
+        return screen
+
+    def info_interface(self, screen, cpu, ram, hdd, ip):
+        '''generate the information screen interface'''
+        # draw background
+        screen.fill(GREY)
+        screen.blit(self.loadImage(BG_IMG),(0,0))
+        # draw title
+        self.setFont('Arial', 30)
+        screen.blit(self.font.render('System Information', True, WHITE), (10, 10))
+        self.setFont('Arial', 14)
+        # load and draw button interface
+        back = self.loadImage(PREVIOUS)
+        self.makeImagebutton(screen, back, 10, 190, 45, 45)
+        exit = self.loadImage(SELECT)
+        screen.blit(self.font.render('close gui', True, WHITE), (260, 170))
+        self.makeImagebutton(screen, exit, 265, 190, 45, 45)
+        self.setFont('Arial', 20)
+        # draw system information fields
+        self.cpuField(screen, cpu)
+        self.RAMField(screen, ram)
+        self.spaceField(screen, hdd) 
+        self.ipField(screen, ip)
+        self.authorField(screen)
         return screen
 
     def TitleField(self, screen, name):
@@ -88,40 +141,6 @@ class Graphics:
         '''print duration to screen'''
         screen.blit(self.font.render('Duration:', True, WHITE), (10, 100))
         screen.blit(self.font.render(str(duration) + "min", True, WHITE), (10, 125))
-        return screen
-
-    def player_interface(self, screen):
-        '''generate the interface for the audio player'''
-        # create background
-        screen.fill(GREY)
-        screen.blit(self.loadImage(BG_IMG),(0,0))
-        # load images for buttons
-        back = self.loadImage(PREVIOUS)
-        pause = self.loadImage(PAUSE)
-        play = self.loadImage(PLAY)
-        # draw buttons to screen
-        screen.blit(pygame.transform.scale(back, (30,30)), (10,200))
-        screen.blit(pygame.transform.scale(pause, (30,30)), (45,200))
-        screen.blit(pygame.transform.scale(play, (30,30)), (80,200))
-        return screen
-
-    def info_interface(self, screen, cpu, ram, hdd, ip, books):
-        '''generate the information screen interface'''
-        # draw background
-        screen.fill(GREY)
-        screen.blit(self.loadImage(BG_IMG),(0,0))
-        # draw title
-        screen.blit(self.font.render('System Information', True, WHITE), (10, 10))
-        # load and draw button interface
-        back = self.loadImage(PREVIOUS)
-        screen.blit(pygame.transform.scale(back, (30,30)), (10,200))
-        # draw system information fields
-        self.cpuField(screen, cpu)
-        self.RAMField(screen, ram)
-        self.spaceField(screen, hdd) 
-        self.ipField(screen, ip)
-        self.bookField(screen, books)
-        self.authorField(screen)
         return screen
 
     def spaceField(self, screen, hdd):
@@ -159,19 +178,11 @@ class Graphics:
         screen.blit(self.font.render(ip, True, WHITE), (75, 125))
         return screen
 
-    def bookField(self, screen, count):
-        '''count number of audio files in music folder and print it to info screen'''
-        # display field name
-        screen.blit(self.font.render('Books', True, WHITE), (10, 150))
-        # display counted audio books
-        screen.blit(self.font.render(str(count), True, WHITE), (75, 150))
-        return screen
-
     def authorField(self, screen):
         '''add author information'''
         # print author information to screen
-        screen.blit(self.font.render('Written by', True, WHITE), (10, 175))
-        screen.blit(self.font.render('Philipp Sehnert', True, WHITE), (115, 175))
+        screen.blit(self.font.render('Written by', True, WHITE), (10, 150))
+        screen.blit(self.font.render('Philipp Sehnert', True, WHITE), (115, 150))
         return screen
 
 

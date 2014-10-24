@@ -9,6 +9,9 @@ import pygame
 # pi-gui imports
 from graphics import Graphics
 
+WHITE = (255, 255, 255)
+YELLOW = (255, 255, 0)
+
 class Book(pygame.font.Font):
     ''' class for storing general informations of one audio book item'''
 
@@ -51,6 +54,45 @@ class BookSelector:
           book = Book(audio, "2:36","10:54", picture)
           self.books.append(book)
 
+    def on_key(self, event, index):
+      # scroll to left
+        if event.key == pygame.K_LEFT:
+          index -=1
+          # make negative index to max index to start new round
+          if index == -1:
+            index = len(self.books) -1
+        # scroll to right
+        if event.key == pygame.K_RIGHT:
+          index = index + 1
+          # set max index to 0 for start new round 
+          if index >= len(self.books):
+            index = 0
+        # select item
+        if event.key == pygame.K_RETURN:
+          self.function(self.books[index].getName())
+        return(index)
+
+    def on_click(self, index):
+        click_pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
+        #now check to see if button 1 was pressed
+        if 10 <= click_pos[0] <= 55 and 190 <= click_pos[1] <= 235:
+          index -=1
+          # make negative index to max index to start new round
+          if index == -1:
+            index = len(self.books) -1
+          return index
+        #now check to see if button 2 was pressed
+        if 65 <= click_pos[0] <= 110 and 190 <= click_pos[1] <= 235:
+          index = index + 1
+          # set max index to 0 for start new round 
+          if index >= len(self.books):
+            index = 0
+          return index
+        #now check to see if button 3 was pressed
+        if 120 <= click_pos[0] <= 160 and 190 <= click_pos[1] <= 235:
+          self.function(self.books[index].getName())
+        return index
+
     def run(self):
       '''run method for drawing the screen to dispay'''
       mainloop = True
@@ -63,27 +105,16 @@ class BookSelector:
         # update display when button is pressed
         for event in pygame.event.get():
           self.graphics.list_interface(self.screen)
+          click_pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
           # end program by quit signal
-          if event.type == pygame.QUIT:
-            mainloop = False
           if event.type == pygame.KEYDOWN:
-            # scroll to left
-            if event.key == pygame.K_LEFT:
-              index -=1
-              # make negative index to max index to start new round
-              if index == -1:
-                index = len(self.books) -1
-            # scroll to right
-            if event.key == pygame.K_RIGHT:
-              index = index + 1
-              # set max index to 0 for start new round 
-              if index >= len(self.books):
-                index = 0
-            # select item
-            if event.key == pygame.K_RETURN:
-              self.function(self.books[index].getName())
+            index = self.on_key(event, index)
             if event.key == pygame.K_BACKSPACE:
               mainloop = False
+          if event.type == pygame.MOUSEBUTTONDOWN:
+            pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
+            pygame.draw.circle(self.screen, YELLOW, pos, 10, 0)
+            index = self.on_click(index)
           # update actual audio book informations
           self.graphics.TitleField(self.screen, self.books[index].getName())
           self.graphics.PlayedField(self.screen, self.books[index].getPlaytime())
