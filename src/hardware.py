@@ -47,7 +47,7 @@ class hardware:
 			pygame.display.update()
 		else:
 			pygame.init()
-			self.screen = pygame.display.set_mode((320,240), pygame.FULLSCREEN)
+			self.screen = pygame.display.set_mode((320,240))
 			pygame.display.update()
 
     def __del__(self):
