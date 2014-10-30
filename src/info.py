@@ -12,9 +12,12 @@ import sys, os
 import psutil
 import socket
 import pygame
+import time
 # import pi-gui functions
 from src.graphics import Graphics
 
+GREY = (64,64,64)
+WHITE = (255,255,255)
 
 class InfoScreen:
 	'''class for gathering system informations and displaying them'''
@@ -64,6 +67,15 @@ class InfoScreen:
 			ip = 'not connected'
 		return ip
 
+	def exit(self):
+		self.screen.fill(GREY)
+		font=pygame.font.Font(None,45)
+		label=font.render("Good Bye!", 1, (WHITE))
+		self.screen.blit(label,(85,100))
+		pygame.display.flip()
+		time.sleep(2)
+		sys.exit()
+
 	def run(self):
 		'''run function for display information screen'''
 		mainloop = True
@@ -82,5 +94,6 @@ class InfoScreen:
 				if 10 <= click_pos[0] <= 55 and 190 <= click_pos[1] <= 235:
 					mainloop = False
 				if 265 <= click_pos[0] <= 310 and 190 <= click_pos[1] <= 235:
-					sys.exit()
+					self.exit()
+
 			pygame.display.flip()
