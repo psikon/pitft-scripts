@@ -39,11 +39,13 @@ class hardware:
 				print 'Driver: {0} failed.'.format(driver)
 				exit(0)
 			self.screen = pygame.display.set_mode((320,240), pygame.FULLSCREEN)
+			pygame.mouse.set_visible(False)
 			# Render the screen
 			pygame.display.update()
 		else:
 			pygame.init()
 			self.screen = pygame.display.set_mode((320,240))
+			pygame.mouse.set_visible(True)
 			pygame.display.update()
 
     def __del__(self):

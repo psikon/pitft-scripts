@@ -27,7 +27,6 @@ class Graphics:
     '''class containing drawing functions for interfaces'''
     def __init__(self):
         self.font = pygame.font.SysFont('Arial', 20)
-        pygame.mouse.set_visible(False)
 
     def __del__(self):
         pass

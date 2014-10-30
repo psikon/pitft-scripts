@@ -6,6 +6,7 @@ with the cursor or pitft buttons'''
 # python imports
 import sys, os
 import pygame
+import eyeD3
 # pi-gui imports
 from graphics import Graphics
 
@@ -50,8 +51,11 @@ class BookSelector:
         # init empty audio book list
         self.books = []
         # create a list of audio books
-        for picture, audio in books.items():
-          book = Book(audio, "2:36","10:54", picture)
+        for audio in books:
+          trackInfo = eyeD3.Mp3AudioFile(music_folder + os.sep + audio)
+          tag = trackInfo.getTag()
+          tag.link(music_folder + os.sep + audio)
+          book = Book(tag.getTitle(), "2:36",trackInfo.getPlayTimeString(), "../images/unknown.jpg")
           self.books.append(book)
 
     def on_key(self, event, index):

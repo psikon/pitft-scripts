@@ -46,10 +46,24 @@ class Player:
       self.clock = pygame.time.Clock()
       self.graphics = Graphics()
       self.book = string
+      PLAYING = False
       
 
     def __del__(self):
       pass
+
+    def play(self, file):
+      pygame.mixer.music.load(file)
+      self.PLAYING = True
+      pygame.mixer.music.play()
+
+    def pause(self):
+      if self.PLAYING:
+        PLAYING = False
+        pygame.mixer.music.pause()
+      else:
+        self.PLAYING = True
+        pygame.mixer.music.unpause()
 
     def on_key(self, event, index):
       # scroll to left
@@ -68,7 +82,6 @@ class Player:
         if event.key == pygame.K_RETURN:
           self.function(self.books[index].getName())
         return(index)
-
     def on_click(self):
       click_pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
       #now check to see if button 1 was pressed
@@ -76,12 +89,12 @@ class Player:
         return False
       #now check to see if button 2 was pressed        
       if 65 <= click_pos[0] <= 110 and 190 <= click_pos[1] <= 235:
-        print "pause"
+        self.pause()
       #now check to see if button 3 was pressed
       if 120 <= click_pos[0] <= 160 and 190 <= click_pos[1] <= 235:
-        print "play"
+        print self.book
+        self.play("music/example.mp3")
       return True
-
 
     def run(self):
       mainloop = True
