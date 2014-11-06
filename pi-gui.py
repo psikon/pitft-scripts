@@ -10,10 +10,10 @@ from argparse import ArgumentParser
 import pygame
 # pi-gui libraries
 from src.hardware import hardware
-from src.startscreen import MainMenu
-from src.bookselector import BookSelector
-from src.play import Player
-from src.info import InfoScreen
+from src.StartInterface import MainMenu
+from src.ListInterface import BookSelector
+from src.PlayerInterface import PlayerInterface
+from src.InfoInterface import InfoScreen
 
 # setup argument parser
 parser = ArgumentParser(description = '%s -- audiobook interface for raspberry pi' % 
@@ -36,7 +36,7 @@ pitft = hardware(args.pi)
 # define functions for main menu
 def last_played():
 	'''wrapper for the player window used by main menu'''
-	player = Player(pitft.getScreen(), "Continue")
+	player = PlayerInterface(pitft.getScreen(), "Continue")
 	player.run()
 
 def information():
@@ -46,7 +46,7 @@ def information():
 
 def play_window(string):
 	'''wrapper for player window used by book selector'''
-	player = Player(pitft.getScreen(), string)
+	player = PlayerInterface(pitft.getScreen(), string)
 	player.run()
 
 def book_selector():

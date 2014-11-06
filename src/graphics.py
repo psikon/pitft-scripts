@@ -142,6 +142,16 @@ class Graphics:
         screen.blit(self.font.render(str(duration) + "min", True, WHITE), (10, 125))
         return screen
 
+    def PlayBar(self, screen, played, duration):
+        duration = 
+        played = played/3600
+        # write string to display
+        screen.blit(self.font.render('Time: ', True, WHITE), (10, 75))
+        #draw status bar for ram usage to screen 
+        pygame.draw.rect(screen, (255,255,255),pygame.Rect(75, 78, played*2.35, 15),0)
+        pygame.draw.rect(screen, (255,255,255), pygame.Rect(75, 78, 235, 15), 1)
+        return screen
+
     def spaceField(self, screen, hdd):
         '''draw disk usage status bar'''
         # write string to display
