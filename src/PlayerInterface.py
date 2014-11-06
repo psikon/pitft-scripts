@@ -42,13 +42,12 @@ class AudioBook(pygame.font.Font):
 
 class PlayerInterface:
 
-    def __init__(self, screen, string):
+    def __init__(self, screen, book):
       self.screen = screen
       self.clock = pygame.time.Clock()
       self.graphics = Graphics()
-      self.book = string
-      path = "music" + os.sep + "example" + ".mp3"
-      self.music = Player(path)
+      self.book = book
+      self.music = Player(self.book)
       
 
     def __del__(self):
@@ -69,7 +68,7 @@ class PlayerInterface:
             index = 0
         # select item
         if event.key == pygame.K_RETURN:
-          self.function(self.books[index].getName())
+          self.function(self.books[index])
         return(index)
 
     def on_click(self):
@@ -92,7 +91,7 @@ class PlayerInterface:
         # Limit frame speed to 30 FPS
         self.clock.tick(30)
         self.graphics.player_interface(self.screen)
-        self.graphics.TitleField(self.screen, self.music.getTitle())
+        #self.graphics.TitleField(self.screen, self.music.getTitle())
         #self.graphics.ArtistField()
         for event in pygame.event.get():
           if event.type == pygame.KEYDOWN:

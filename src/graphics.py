@@ -143,7 +143,6 @@ class Graphics:
         return screen
 
     def PlayBar(self, screen, played, duration):
-        duration = 
         played = played/3600
         # write string to display
         screen.blit(self.font.render('Time: ', True, WHITE), (10, 75))

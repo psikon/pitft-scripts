@@ -21,7 +21,7 @@ class ID3Tag:
 	def getArtist(self):
 		return self.id3.tag.getArtist()
 
-	def getPlayTimeString(self):
+	def getPlaytime(self):
 		return self.id3.getPlayTimeString()
 
 	def getYear(self):

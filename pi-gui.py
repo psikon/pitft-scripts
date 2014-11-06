@@ -51,16 +51,7 @@ def play_window(string):
 
 def book_selector():
 	'''wrapper for media library screen'''
-	# create inventory
-	books = []
-	# iterate through music folder
-	for audio in os.listdir(args.music):
-		# select all cover pictures
-		if audio.endswith(".mp3"):
-			# find corresponding audio books
-			books.append(audio)
-
-	bs = BookSelector(pitft.getScreen(), books, args.music, play_window)
+	bs = BookSelector(pitft.getScreen(), args.music, play_window)
 	bs.run()
 
 def main(): 

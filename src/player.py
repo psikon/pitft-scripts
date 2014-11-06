@@ -10,12 +10,10 @@ from graphics import Graphics
 
 class Player:
 
-	def __init__(self, path):
+	def __init__(self, book):
 		pygame.mixer.init()
-		self.playing = False
-		self.id3 = eyeD3.Mp3AudioFile(path)
-		print 
-		pygame.mixer.music.load(path)
+		self.book = book
+		pygame.mixer.music.load(book.getPath())
 		
 
 	def get_status(self):
