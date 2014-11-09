@@ -8,7 +8,7 @@ to screen
 #@contact: philipp.sehnert[a]gmail.com
 
 # python imports
-import sys, os
+import sys, os, time
 import pygame
 
 # define colors
@@ -119,36 +119,38 @@ class Graphics:
         self.authorField(screen)
         return screen
 
-    def TitleField(self, screen, name):
+    def Title(self, screen, name):
         '''generate title field'''
         screen.blit(self.font.render(name, True, WHITE), (10, 10))
         return screen
 
-    def CoverField(self, screen, image, folder):
+    def Cover(self, screen, image, size_x, size_y, xpos, ypos):
         '''load and draw cover to screen'''
-        cover = self.loadImage(folder + os.sep + image)
-        screen.blit(pygame.transform.scale(cover, (150,150)), (155,40))
+        cover = self.loadImage(image)
+        screen.blit(pygame.transform.scale(cover, (size_x, size_y)), (xpos, ypos))
         return screen
 
-    def PlayedField(self, screen, playtime):
+    def PlayTime(self, screen, playtime):
         ''' print playtime to screen'''
-        screen.blit(self.font.render('Played:', True, WHITE), (10, 45))
-        screen.blit(self.font.render(str(playtime) + "min", True, WHITE), (10, 70))
+        screen.blit(self.font.render('Time:', True, WHITE), (10, 100))
+        screen.blit(self.font.render(str(playtime) + " min", True, WHITE), (10, 125))
         return screen
 
-    def DurationField(self, screen, duration):
+    def Artist(self, screen, artist):
         '''print duration to screen'''
-        screen.blit(self.font.render('Duration:', True, WHITE), (10, 100))
-        screen.blit(self.font.render(str(duration) + "min", True, WHITE), (10, 125))
+        screen.blit(self.font.render('Artist', True, WHITE), (10, 45))
+        screen.blit(self.font.render(artist, True, WHITE), (10, 70))
         return screen
 
-    def PlayBar(self, screen, played, duration):
-        played = played/3600
+    def PlayBar(self, screen, total, pos):
+        time_tuple = time.strptime(total, "%M:%S")
+        print time_tuple
+        print pos
         # write string to display
-        screen.blit(self.font.render('Time: ', True, WHITE), (10, 75))
+        screen.blit(self.font.render('Time: ', True, WHITE), (10, 130))
         #draw status bar for ram usage to screen 
-        pygame.draw.rect(screen, (255,255,255),pygame.Rect(75, 78, played*2.35, 15),0)
-        pygame.draw.rect(screen, (255,255,255), pygame.Rect(75, 78, 235, 15), 1)
+        pygame.draw.rect(screen, (255,255,255),pygame.Rect(10, 165, 10*2.35, 25),0)
+        pygame.draw.rect(screen, (255,255,255), pygame.Rect(10, 165, 300, 25), 1)
         return screen
 
     def spaceField(self, screen, hdd):

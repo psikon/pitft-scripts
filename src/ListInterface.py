@@ -31,6 +31,12 @@ class Book(pygame.font.Font):
     def getTitle(self):
       return self.title
     
+    def getArtist(self):
+      return self.artist
+
+    def getAlbum(self):
+      return self.getAlbum
+
     def getPlaytime(self):
       return self.playtime
 
@@ -63,7 +69,7 @@ class BookSelector:
             # reconstruct path
             path = music_folder + os.sep + audio
             tag = ID3Tag(path)
-            book = Book(path, tag.getTitle(), tag.getArtist(), tag.getAlbum(), tag.getPlaytime(), "../images/unknown.jpg")
+            book = Book(path, tag.getTitle(), tag.getArtist(), tag.getAlbum(), tag.getPlaytime(), "images/unknown.jpg")
             books.append(book)
       return books
 
@@ -130,9 +136,10 @@ class BookSelector:
             pygame.draw.circle(self.screen, YELLOW, pos, 10, 0)
             index = self.on_click(index)
           # update actual audio book informations
-          self.graphics.TitleField(self.screen, self.books[index].getTitle())
-          self.graphics.PlayedField(self.screen, self.books[index].getPlaytime())
-          self.graphics.CoverField(self.screen, self.books[index].getCover(), self.folder)  
+          self.graphics.Title(self.screen, self.books[index].getTitle())
+          self.graphics.Artist(self.screen, self.books[index].getArtist())
+          self.graphics.PlayTime(self.screen, self.books[index].getPlaytime())
+          self.graphics.Cover(self.screen, self.books[index].getCover(), 150, 150, 155, 40)  
         # update display
         pygame.display.flip()
  

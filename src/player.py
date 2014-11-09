@@ -42,6 +42,6 @@ class Player:
 		self.set_status(False)
 		pygame.mixer.music.stop()
 
-	def played(self):
+	def get_pos(self):
 		return pygame.mixer.music.get_pos()
 

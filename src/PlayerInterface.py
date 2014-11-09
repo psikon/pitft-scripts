@@ -18,28 +18,6 @@ from player import Player
 WHITE = (255, 255, 255)
 YELLOW = (255, 255, 0)
 
-
-class AudioBook(pygame.font.Font):
-    
-    def __init__(self, name, played, duration, cover):
-      self.name = name
-      self.played = played
-      self.duration = duration
-      self.cover = cover
-
-    def getName(self):
-      return self.name
-    
-    def getPlaytime(self):
-      return self.played
-
-    def getDuration(self):
-      return self.duration
-
-    def getCover(self):
-      return self.cover
-
-
 class PlayerInterface:
 
     def __init__(self, screen, book):
@@ -91,8 +69,10 @@ class PlayerInterface:
         # Limit frame speed to 30 FPS
         self.clock.tick(30)
         self.graphics.player_interface(self.screen)
-        #self.graphics.TitleField(self.screen, self.music.getTitle())
-        #self.graphics.ArtistField()
+        self.graphics.Title(self.screen, self.book.getTitle())
+        self.graphics.Artist(self.screen, self.book.getArtist())
+        self.graphics.Cover(self.screen, self.book.getCover(), 100, 100, 190, 40)
+        self.graphics.PlayBar(self.screen, self.book.getPlaytime(), self.music.get_pos())
         for event in pygame.event.get():
           if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_BACKSPACE:
