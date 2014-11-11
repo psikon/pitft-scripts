@@ -71,7 +71,7 @@ class PlayerInterface:
         self.graphics.player_interface(self.screen)
         self.graphics.Title(self.screen, self.book.getTitle())
         self.graphics.Artist(self.screen, self.book.getArtist())
-        self.graphics.Cover(self.screen, self.book.getCover(), 100, 100, 190, 40)
+        self.graphics.Cover(self.screen, self.book.getCover(), 80, 80, 220, 40)
         self.graphics.PlayBar(self.screen, self.book.getPlaytime(), self.music.get_pos())
         for event in pygame.event.get():
           if event.type == pygame.KEYDOWN:

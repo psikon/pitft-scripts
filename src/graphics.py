@@ -130,6 +130,21 @@ class Graphics:
         screen.blit(pygame.transform.scale(cover, (size_x, size_y)), (xpos, ypos))
         return screen
 
+    def time_conversion(self, string, type):
+        x = 0
+        if type is 'time':
+            # seperate in hour:minutes:sec
+            x = string.split(':', 3)
+            if len(x) < 3: x = ['00'] + x
+            x = int(x[0])*3600000 + int(x[1])*60000 + int(x[2])*1000
+        else:
+            # convert milli to sec
+            s = string/1000
+            m,s = divmod(s,60)
+            h,m = divmod(m,60)
+            x = '%d:%d:%d' % (h,m,s)
+        return x
+
     def PlayTime(self, screen, playtime):
         ''' print playtime to screen'''
         screen.blit(self.font.render('Time:', True, WHITE), (10, 100))
@@ -143,14 +158,17 @@ class Graphics:
         return screen
 
     def PlayBar(self, screen, total, pos):
-        time_tuple = time.strptime(total, "%M:%S")
-        print time_tuple
-        print pos
+        # calcultate factor for progress
+        factor = self.time_conversion(total, 'time')/300
+        if pos == -1: pos = 0
         # write string to display
-        screen.blit(self.font.render('Time: ', True, WHITE), (10, 130))
+        screen.blit(self.font.render('Time: ', True, WHITE), (10, 135))
+        screen.blit(self.font.render(self.time_conversion(pos,'string') + '/' + total, True, WHITE),
+                                     (70, 135))
         #draw status bar for ram usage to screen 
-        pygame.draw.rect(screen, (255,255,255),pygame.Rect(10, 165, 10*2.35, 25),0)
-        pygame.draw.rect(screen, (255,255,255), pygame.Rect(10, 165, 300, 25), 1)
+        pygame.draw.rect(screen, (255,255,255),pygame.Rect(pos/factor+10, 160, 5, 25),0)
+        pygame.draw.rect(screen, (255,255,255),pygame.Rect(10, 165, pos/factor, 15),0)
+        pygame.draw.rect(screen, (255,255,255), pygame.Rect(10, 165, 300, 15), 1)
         return screen
 
     def spaceField(self, screen, hdd):

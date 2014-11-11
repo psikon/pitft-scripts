@@ -14,6 +14,7 @@ class Player:
 		pygame.mixer.init()
 		self.book = book
 		pygame.mixer.music.load(book.getPath())
+		self.playing = pygame.mixer.music.get_busy()
 		
 
 	def get_status(self):
