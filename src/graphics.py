@@ -10,6 +10,7 @@ to screen
 # python imports
 import sys, os, time
 import pygame
+from utils import str2time, time2str
 
 # define colors
 WHITE = (255, 255, 255)
@@ -65,60 +66,6 @@ class Graphics:
         # frame around icon
         #pygame.draw.rect(screen, WHITE, (xpos, ypos, 31, 31), 1)
 
-    def list_interface(self, screen):
-        '''generate screen for book selector interface'''
-        # create background
-        screen.fill(GREY)
-        screen.blit(self.loadImage(BG_IMG),(0,0))
-        # load button images
-        left = self.loadImage(PREVIOUS)
-        right = self.loadImage(NEXT)
-        select = self.loadImage(SELECT)
-        # draw buttons to screen
-        self.makeImagebutton(screen, left, 10, 190, 45, 45)
-        self.makeImagebutton(screen, right, 65, 190, 45, 45)
-        self.makeImagebutton(screen, select, 120, 190, 45, 45)
-        return screen
-
-    def player_interface(self, screen):
-        '''generate the interface for the audio player'''
-        # create background
-        screen.fill(GREY)
-        screen.blit(self.loadImage(BG_IMG),(0,0))
-        # load images for buttons
-        back = self.loadImage(PREVIOUS)
-        pause = self.loadImage(PAUSE)
-        play = self.loadImage(PLAY)
-        # draw buttons to screen
-        self.makeImagebutton(screen, back, 10, 190, 45, 45)
-        self.makeImagebutton(screen, pause, 65, 190, 45, 45)
-        self.makeImagebutton(screen, play, 120, 190, 45, 45)
-        return screen
-
-    def info_interface(self, screen, cpu, ram, hdd, ip):
-        '''generate the information screen interface'''
-        # draw background
-        screen.fill(GREY)
-        screen.blit(self.loadImage(BG_IMG),(0,0))
-        # draw title
-        self.setFont('Arial', 30)
-        screen.blit(self.font.render('System Information', True, WHITE), (10, 10))
-        self.setFont('Arial', 14)
-        # load and draw button interface
-        back = self.loadImage(PREVIOUS)
-        self.makeImagebutton(screen, back, 10, 190, 45, 45)
-        exit = self.loadImage(SELECT)
-        screen.blit(self.font.render('close gui', True, WHITE), (260, 170))
-        self.makeImagebutton(screen, exit, 265, 190, 45, 45)
-        self.setFont('Arial', 20)
-        # draw system information fields
-        self.cpuField(screen, cpu)
-        self.RAMField(screen, ram)
-        self.spaceField(screen, hdd) 
-        self.ipField(screen, ip)
-        self.authorField(screen)
-        return screen
-
     def Title(self, screen, name):
         '''generate title field'''
         screen.blit(self.font.render(name, True, WHITE), (10, 10))
@@ -126,24 +73,9 @@ class Graphics:
 
     def Cover(self, screen, image, size_x, size_y, xpos, ypos):
         '''load and draw cover to screen'''
-        cover = self.loadImage(image)
-        screen.blit(pygame.transform.scale(cover, (size_x, size_y)), (xpos, ypos))
+        screen.blit(pygame.transform.scale(self.loadImage(image), 
+            (size_x, size_y)), (xpos, ypos))
         return screen
-
-    def time_conversion(self, string, type):
-        x = 0
-        if type is 'time':
-            # seperate in hour:minutes:sec
-            x = string.split(':', 3)
-            if len(x) < 3: x = ['00'] + x
-            x = int(x[0])*3600000 + int(x[1])*60000 + int(x[2])*1000
-        else:
-            # convert milli to sec
-            s = string/1000
-            m,s = divmod(s,60)
-            h,m = divmod(m,60)
-            x = '%d:%d:%d' % (h,m,s)
-        return x
 
     def PlayTime(self, screen, playtime):
         ''' print playtime to screen'''
@@ -159,11 +91,11 @@ class Graphics:
 
     def PlayBar(self, screen, total, pos):
         # calcultate factor for progress
-        factor = self.time_conversion(total, 'time')/300
+        factor = str2time(total)/300
         if pos == -1: pos = 0
         # write string to display
         screen.blit(self.font.render('Time: ', True, WHITE), (10, 135))
-        screen.blit(self.font.render(self.time_conversion(pos,'string') + '/' + total, True, WHITE),
+        screen.blit(self.font.render(time2str(pos) + '/' + total, True, WHITE),
                                      (70, 135))
         #draw status bar for ram usage to screen 
         pygame.draw.rect(screen, (255,255,255),pygame.Rect(pos/factor+10, 160, 5, 25),0)

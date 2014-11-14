@@ -14,7 +14,7 @@ import socket
 import pygame
 import time
 # import pi-gui functions
-from src.graphics import Graphics
+from interfaces import Interface
 
 GREY = (64,64,64)
 WHITE = (255,255,255)
@@ -29,7 +29,7 @@ class InfoScreen:
 		# needed for framerate
 		self.clock = pygame.time.Clock()
 		# containing all interface functions
-		self.graphics = Graphics()
+		self.interface = Interface()
 
 	def __del__(self):
 		pass
@@ -85,9 +85,8 @@ class InfoScreen:
 			self.clock.tick(60)
 			for event in pygame.event.get():
 				# draw interface to diplay
-				self.graphics.info_interface(self.screen, self.cpu_info(), 
-				self.ram_info(), self.hdd_info("/"), 
-				self.ip_info())
+				self.interface.info_interface(self.screen, self.cpu_info(), 
+					self.ram_info(), self.hdd_info("/"), self.ip_info())
 				click_pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
 				if event.type == pygame.KEYDOWN and event.key == pygame.K_BACKSPACE:
 					mainloop = False

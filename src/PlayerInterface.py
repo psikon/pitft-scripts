@@ -11,6 +11,7 @@ import sys, os
 import pygame
 # import pi-gui libraries
 from graphics import Graphics
+from interfaces import Interface
 from player import Player
 
 
@@ -24,6 +25,7 @@ class PlayerInterface:
       self.screen = screen
       self.clock = pygame.time.Clock()
       self.graphics = Graphics()
+      self.interface = Interface()
       self.book = book
       self.music = Player(self.book)
       
@@ -68,11 +70,9 @@ class PlayerInterface:
       while mainloop:
         # Limit frame speed to 30 FPS
         self.clock.tick(30)
-        self.graphics.player_interface(self.screen)
-        self.graphics.Title(self.screen, self.book.getTitle())
-        self.graphics.Artist(self.screen, self.book.getArtist())
-        self.graphics.Cover(self.screen, self.book.getCover(), 80, 80, 220, 40)
-        self.graphics.PlayBar(self.screen, self.book.getPlaytime(), self.music.get_pos())
+        self.interface.player_interface(self.screen, self.book.getTitle(),
+          self.book.getArtist(), self.book.getPlaytime(), 
+          self.music.get_pos(), self.book.getCover())
         for event in pygame.event.get():
           if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_BACKSPACE:

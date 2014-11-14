@@ -8,7 +8,7 @@ import sys, os
 import pygame
 import eyeD3
 # pi-gui imports
-from graphics import Graphics
+from interfaces import Interface
 from id3tag import ID3Tag
 
 WHITE = (255, 255, 255)
@@ -45,6 +45,7 @@ class Book(pygame.font.Font):
 
 class BookSelector:
     '''generates the scrollable list screen'''
+
     def __init__(self, screen, music_folder, function):
         # define general variables
         self.screen = screen
@@ -54,7 +55,7 @@ class BookSelector:
         # important for framerate
         self.clock = pygame.time.Clock()
         # contain all interface methods
-        self.graphics = Graphics()
+        self.interface = Interface()
         # declare functions
         self.function = function
         self.books = self.create_inventory(self.folder)
@@ -69,7 +70,8 @@ class BookSelector:
             # reconstruct path
             path = music_folder + os.sep + audio
             tag = ID3Tag(path)
-            book = Book(path, tag.getTitle(), tag.getArtist(), tag.getAlbum(), tag.getPlaytime(), "images/unknown.jpg")
+            book = Book(path, tag.getTitle(), tag.getArtist(), tag.getAlbum(), 
+              tag.getPlaytime(), "images/unknown.jpg")
             books.append(book)
       return books
 
@@ -124,9 +126,12 @@ class BookSelector:
         self.clock.tick(30)
         # update display when button is pressed
         for event in pygame.event.get():
-          self.graphics.list_interface(self.screen)
+          # draw interface on screen
+          self.interface.list_interface(self.screen, 
+            self.books[index].getTitle(), self.books[index].getArtist(),
+            self.books[index].getPlaytime(), self.books[index].getCover())
           click_pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
-          # end program by quit signal
+
           if event.type == pygame.KEYDOWN:
             index = self.on_key(event, index)
             if event.key == pygame.K_BACKSPACE:
@@ -135,11 +140,6 @@ class BookSelector:
             pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
             pygame.draw.circle(self.screen, YELLOW, pos, 10, 0)
             index = self.on_click(index)
-          # update actual audio book informations
-          self.graphics.Title(self.screen, self.books[index].getTitle())
-          self.graphics.Artist(self.screen, self.books[index].getArtist())
-          self.graphics.PlayTime(self.screen, self.books[index].getPlaytime())
-          self.graphics.Cover(self.screen, self.books[index].getCover(), 150, 150, 155, 40)  
         # update display
         pygame.display.flip()
  
