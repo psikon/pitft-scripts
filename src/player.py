@@ -1,48 +1,92 @@
 #!/usr/bin/env python
-''''''
 
-# python imports
+'''
+Description
+'''
+#@author: Philipp Sehnert
+#@contact: philipp.sehnert[a]gmail.com
+
+# import python libraries
 import sys, os
 import pygame
-
-# pi-gui imports
+# import pi-gui libraries
 from graphics import Graphics
+from interfaces import Interface
+from music import Player
 
-class Player:
 
-	def __init__(self, book):
-		pygame.mixer.init()
-		self.book = book
-		pygame.mixer.music.load(book.getPath())
-		self.playing = pygame.mixer.music.get_busy()
-		
 
-	def get_status(self):
-		return self.playing
+WHITE = (255, 255, 255)
+YELLOW = (255, 255, 0)
 
-	def set_status(self, bool):
-		self.playing = bool
+class PlayerInterface:
 
-	def play(self):
-		if not pygame.mixer.music.get_busy():
-			self.set_status(True)
-			pygame.mixer.music.play()
-		else:
-			pygame.mixer.music.stop()
-			self.set_status(False)
+    def __init__(self, screen, book):
+      self.screen = screen
+      self.clock = pygame.time.Clock()
+      self.graphics = Graphics()
+      self.interface = Interface()
+      self.book = book
+      self.music = Player(self.book)
+      
 
-	def pause(self):
-		if self.get_status():
-			pygame.mixer.music.pause()
-			self.set_status(False)
-		else:
-			pygame.mixer.music.unpause()
-			self.set_status(True)
+    def __del__(self):
+      pass
 
-	def stop(self):
-		self.set_status(False)
-		pygame.mixer.music.stop()
+    def on_key(self, event, index):
+      # scroll to left
+        if event.key == pygame.K_LEFT:
+          index -=1
+          # make negative index to max index to start new round
+          if index == -1:
+            index = len(self.books) -1
+        # scroll to right
+        if event.key == pygame.K_RIGHT:
+          index = index + 1
+          # set max index to 0 for start new round 
+          if index >= len(self.books):
+            index = 0
+        # select item
+        if event.key == pygame.K_RETURN:
+          self.function(self.books[index])
+        return(index)
 
-	def get_pos(self):
-		return pygame.mixer.music.get_pos()
+    def on_click(self):
+      click_pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
+      #now check to see if button 1 was pressed
+      if 10 <= click_pos[0] <= 55 and 190 <= click_pos[1] <= 235:
+        self.music.stop()
+        return False
+      #now check to see if button 2 was pressed        
+      if 65 <= click_pos[0] <= 110 and 190 <= click_pos[1] <= 235:
+        self.music.pause()
+      #now check to see if button 3 was pressed
+      if 120 <= click_pos[0] <= 160 and 190 <= click_pos[1] <= 235:
+        self.music.play()
+      return True
+
+    def run(self):
+      mainloop = True
+      while mainloop:
+        # Limit frame speed to 30 FPS
+        self.clock.tick(30)
+        self.interface.player_interface(self.screen, self.book.getTitle(),
+          self.book.getArtist(), self.book.getPlaytime(), 
+          self.music.get_pos(), self.book.getCover())
+        for event in pygame.event.get():
+          if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_BACKSPACE:
+              mainloop = False
+          if event.type == pygame.MOUSEBUTTONDOWN:
+            pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
+            pygame.draw.circle(self.screen, YELLOW, pos, 10, 0)
+            mainloop = self.on_click()
+        pygame.display.flip()
+
+ 
+            
+            
+
+
+ 
 

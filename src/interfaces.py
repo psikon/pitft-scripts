@@ -10,7 +10,7 @@ to screen
 # python imports
 import sys, os, time
 import pygame
-from src.graphics import Graphics
+from graphics import Graphics
 
 # define colors
 WHITE = (255, 255, 255)

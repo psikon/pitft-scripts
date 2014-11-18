@@ -17,12 +17,13 @@ YELLOW = (255, 255, 0)
 class Book(pygame.font.Font):
     ''' class for storing general informations of one audio book item'''
 
-    def __init__(self, path, title, artist, album, playtime, cover):
+    def __init__(self, path, title, artist, album, playtime, position, cover):
       self.path = path
       self.title = title
       self.artist = artist
       self.album = album
       self.playtime = playtime
+      self.position = float(position)
       self.cover = cover
 
     def getPath(self):
@@ -39,6 +40,9 @@ class Book(pygame.font.Font):
 
     def getPlaytime(self):
       return self.playtime
+
+    def getPosition(self):
+      return self.position
 
     def getCover(self):
       return self.cover
@@ -71,7 +75,7 @@ class BookSelector:
             path = music_folder + os.sep + audio
             tag = ID3Tag(path)
             book = Book(path, tag.getTitle(), tag.getArtist(), tag.getAlbum(), 
-              tag.getPlaytime(), "images/unknown.jpg")
+              tag.getPlaytime(), 0, "images/unknown.jpg")
             books.append(book)
       return books
 
