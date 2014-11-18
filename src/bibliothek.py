@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-'''booklist-interface creates a screen for selecting the ebooks from a list by showing 
+'''bibliothek creates a screen for selecting the ebooks from a list by showing 
 the name, cover and supplemental informations on the screen. The books are scrollable 
-with the cursor or pitft buttons'''
+with the cursor or pitft touchscreen'''
 
 # python imports
 import sys, os

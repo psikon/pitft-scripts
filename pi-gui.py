@@ -22,10 +22,13 @@ parser = ArgumentParser(description = '%s -- audiobook interface for raspberry p
                            (os.path.basename(sys.argv[0])),
                           	epilog = 'created by Philipp Sehnert',
                           	add_help = True)
+# version output
 parser.add_argument('--version', action = 'version', version = '%s 1.0' % 
                      	(os.path.basename(sys.argv[0])))
+# select output to x or pitft
 parser.add_argument('-pi', dest = 'pi', default = False, 
   						action = 'store_true', help = 'choose interface')
+# select music folder
 parser.add_argument('-m', type = str, dest = 'music', default = "./music", 
   					help = 'destination of music folder')
 
@@ -38,8 +41,11 @@ pitft = hardware(args.pi)
 # define functions for main menu
 def last_played():
 	'''wrapper for the player window used by main menu'''
+	# load cache file
 	progress = load_progress()
+	# create id3tag object
 	id3 = ID3Tag(progress[0])
+	# create book object with id3 tags and actual position
 	book = Book(progress[0], id3.getTitle(), id3.getArtist(), id3.getAlbum(),
 	 id3.getPlaytime(), int(progress[1])/1000, "images/unknown.jpg")
 	player = PlayerInterface(pitft.getScreen(), book)
