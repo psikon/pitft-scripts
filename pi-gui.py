@@ -11,7 +11,7 @@ import pygame
 # pi-gui libraries
 from src.hardware import hardware
 from src.mainscreen import MainMenu
-from src.bibliothek import BookSelector, Book
+from src.library import Library, Book
 from src.player import PlayerInterface
 from src.systeminfo import InfoScreen
 from src.id3tag import ID3Tag
@@ -63,7 +63,7 @@ def play_window(string):
 
 def book_selector():
 	'''wrapper for media library screen'''
-	bs = BookSelector(pitft.getScreen(), args.music, play_window)
+	bs = Library(pitft.getScreen(), args.music, play_window)
 	bs.run()
 
 def main(): 

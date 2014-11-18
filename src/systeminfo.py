@@ -8,16 +8,12 @@ like disk space, cpu usage ...
 #@contact: philipp.sehnert[a]gmail.com
 
 # import python libraries
-import sys, os
+import sys, os, time
 import psutil
 import socket
 import pygame
-import time
 # import pi-gui functions
 from interfaces import Interface
-
-GREY = (64,64,64)
-WHITE = (255,255,255)
 
 class InfoScreen:
 	'''class for gathering system informations and displaying them'''
@@ -25,7 +21,6 @@ class InfoScreen:
 	def __init__(self, screen, music_folder):
 		# init important variables
 		self.screen = screen
-		self.folder = music_folder
 		# needed for framerate
 		self.clock = pygame.time.Clock()
 		# containing all interface functions
@@ -36,6 +31,7 @@ class InfoScreen:
 
 	def hdd_info(self, path):
 		'''get informations about free and total disk space'''
+		# get space information
 		st = os.statvfs(path)
 		# convert free and total to megabyte
 		free = (st.f_bavail * st.f_frsize)/100000
@@ -50,12 +46,12 @@ class InfoScreen:
 		return sum(cpu)/len(cpu)
 	
 	def ram_info(self):
+		''' get informations about ram usage'''
 		# get percantage of used ram 
 		return int(psutil.virtual_memory()[2])
 
-
 	def ip_info(self):
-		'''if connected get the ip networking address'''
+		'''if connected to a network get the ip networking address'''
 		try:
 			# open sokect connection
 			s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -64,35 +60,37 @@ class InfoScreen:
 			# get ip string
 			ip = s.getsockname()[0]
 		except:
-			ip = 'not connected'
+			ip = 'not connected to inet'
 		return ip
 
 	def exit(self):
-		self.screen.fill(GREY)
-		font=pygame.font.Font(None,45)
-		label=font.render("Good Bye!", 1, (WHITE))
-		self.screen.blit(label,(85,100))
+		'''exit program and show a little exit message'''
+		# create exit message
+		self.interface.exit_interface(self.screen)
 		pygame.display.flip()
+		# wait 2 seconds and quit
 		time.sleep(2)
 		sys.exit()
+
 
 	def run(self):
 		'''run function for display information screen'''
 		mainloop = True
 		# use infinity loop for display
 		while mainloop:
-			# Limit frame speed to 30 FPS
+			# Limit frame speed to 60 FPS
 			self.clock.tick(60)
 			for event in pygame.event.get():
 				# draw interface to diplay
 				self.interface.info_interface(self.screen, self.cpu_info(), 
 					self.ram_info(), self.hdd_info("/"), self.ip_info())
+				# get actual mouse position
 				click_pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
-				if event.type == pygame.KEYDOWN and event.key == pygame.K_BACKSPACE:
-					mainloop = False
+				# return to previous screen
 				if 10 <= click_pos[0] <= 55 and 190 <= click_pos[1] <= 235:
 					mainloop = False
+				# exit program
 				if 265 <= click_pos[0] <= 310 and 190 <= click_pos[1] <= 235:
 					self.exit()
-
+			# update display
 			pygame.display.flip()

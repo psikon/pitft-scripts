@@ -97,3 +97,10 @@ class Interface:
 		self.graphics.ipField(screen, ip)
 		self.graphics.authorField(screen)
 		return screen
+
+	def exit_interface(self, screen):
+		screen.fill(GREY)
+		font = pygame.font.Font(None, 45)
+		label = font.render("Good Bye!", 1, (WHITE))
+		screen.blit(label, (85,100))
+		return screen
