@@ -1,4 +1,4 @@
 [Progress]
 path = ./music/example2.mp3
-position = 2119
+position = -1
 

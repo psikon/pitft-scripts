@@ -113,7 +113,7 @@ class Interface:
 		return screen
 
 	def exit_interface(self, screen):
-		''' draw an ĺittle exit screen with a little message '''
+		''' draw an little exit screen with a little message '''
 		# draw background
 		screen.fill(GREY)
 		# set a bigger font
