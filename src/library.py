@@ -10,8 +10,8 @@ import eyeD3
 # pi-gui imports
 from interfaces import Interface
 from id3tag import ID3Tag
+from utils import pressed
 
-WHITE = (255, 255, 255)
 YELLOW = (255, 255, 0)
 
 class Book(pygame.font.Font):
@@ -48,13 +48,11 @@ class Book(pygame.font.Font):
       return self.cover
 
 class Library:
-    '''generate a library screen for scolling through the audiobooks'''
+    '''generate a library screen for scrolling through the audiobooks'''
 
     def __init__(self, screen, music_folder, function):
         # define screen variables
         self.screen = screen
-        self.scr_width = self.screen.get_rect().width
-        self.scr_height = self.screen.get_rect().height
         # define music folder
         self.folder = music_folder
         # important for framerate
@@ -66,7 +64,7 @@ class Library:
         # create library
         self.books = self.create_inventory(self.folder)
         
-
+    '''obsolete in future'''
     def create_inventory(self, music_folder):
       books = []
       # create a list of audio books
@@ -82,27 +80,32 @@ class Library:
       return books
 
     def on_click(self, index):
-        # get actual position of mouse click 
-        click_pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
-        # scroll to left
-        if 10 <= click_pos[0] <= 55 and 190 <= click_pos[1] <= 235:
-          index -=1
-          # make negative index to max index to start new round
-          if index == -1:
-            index = len(self.books) -1
-          return index
-        # scroll to right
-        if 65 <= click_pos[0] <= 110 and 190 <= click_pos[1] <= 235:
-          index = index + 1
-          # set max index to 0 for start new round 
-          if index >= len(self.books):
-            index = 0
-          return index
-        # select a book
-        if 120 <= click_pos[0] <= 160 and 190 <= click_pos[1] <= 235:
-          print self.books[index]
-          self.function(self.books[index])
+      '''recognize touchscreen and mouse selections to 
+      run functionalities of buttons'''
+      # get actual position of mouse click 
+      click_pos = pressed()
+      # go back to main screen
+      if 10 <= click_pos[0] <= 55 and 190 <= click_pos[1] <= 235:
+        return 999
+      # scroll to left
+      if 155 <= click_pos[0] <= 200 and 190 <= click_pos[1] <= 235:
+        index -=1
+        # make negative index to max index to start new round
+        if index == -1:
+          index = len(self.books) -1
         return index
+      # scroll to right
+      if 210 <= click_pos[0] <= 255 and 190 <= click_pos[1] <= 235:
+        index = index + 1
+        # set max index to 0 for start new round 
+        if index >= len(self.books):
+          index = 0
+        return index
+      # select a book
+      if 265 <= click_pos[0] <= 310 and 190 <= click_pos[1] <= 235:
+        # select actual book and go to play window
+        self.function(self.books[index])
+      return index
 
     def run(self):
       '''run method for drawing the screen to dispay'''
@@ -113,20 +116,20 @@ class Library:
       while mainloop:
         # Limit frame speed to 30 FPS
         self.clock.tick(30)
-        # update display when button is pressed
         for event in pygame.event.get():
           # draw interface on screen
           self.interface.list_interface(self.screen, 
             self.books[index].getTitle(), self.books[index].getArtist(),
             self.books[index].getPlaytime(), self.books[index].getCover())
-          # mouse button clicked
+          # wit for touchscreen event
           if event.type == pygame.MOUSEBUTTONDOWN:
-            # get position
-            pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
             # draw circle for touchscreen feedback
-            pygame.draw.circle(self.screen, YELLOW, pos, 10, 0)
+            pygame.draw.circle(self.screen, YELLOW, pressed(), 10, 0)
             # update index in library
             index = self.on_click(index)
+            # exit mainloop
+            if index == 999: mainloop = False
+            
         # update display
         pygame.display.flip()
  

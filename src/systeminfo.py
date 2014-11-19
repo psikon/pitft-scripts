@@ -1,11 +1,7 @@
-#!/usr/bin/env python
-
 '''
 information screen for display some system facts to the pi-gui system 
 like disk space, cpu usage ... 
 '''
-#@author: Philipp Sehnert
-#@contact: philipp.sehnert[a]gmail.com
 
 # import python libraries
 import sys, os, time
@@ -14,6 +10,9 @@ import socket
 import pygame
 # import pi-gui functions
 from interfaces import Interface
+from utils import pressed
+
+YELLOW = (255, 255, 0)
 
 class InfoScreen:
 	'''class for gathering system informations and displaying them'''
@@ -78,14 +77,16 @@ class InfoScreen:
 		mainloop = True
 		# use infinity loop for display
 		while mainloop:
-			# Limit frame speed to 60 FPS
-			self.clock.tick(60)
+			# Limit frame speed to 120 FPS
+			self.clock.tick(120)
 			for event in pygame.event.get():
 				# draw interface to diplay
 				self.interface.info_interface(self.screen, self.cpu_info(), 
 					self.ram_info(), self.hdd_info("/"), self.ip_info())
 				# get actual mouse position
-				click_pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
+				click_pos = pressed()
+				# draw touchscreen feedback
+				pygame.draw.circle(self.screen, YELLOW, pressed(), 10, 0)
 				# return to previous screen
 				if 10 <= click_pos[0] <= 55 and 190 <= click_pos[1] <= 235:
 					mainloop = False

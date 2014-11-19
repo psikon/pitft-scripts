@@ -1,11 +1,7 @@
-#!/usr/bin/env python
-
 '''
-graphic library containing all functions needed for drawing interface 
-to screen
+interface library importing all graphic methods and providing functions
+for the generation of every interface screen
 '''
-#@author: Philipp Sehnert
-#@contact: philipp.sehnert[a]gmail.com
 
 # python imports
 import sys, os, time
@@ -30,13 +26,29 @@ class Interface:
 		self.graphics = Graphics()
 
 	def getFont(self):
+		''' return actual font '''
 		return self.font
 
 	def setFont(self, font, font_size):
+		''' set new font and size '''
 		self.font = pygame.font.SysFont(font, font_size)
 
+	def main_interface(self, screen):
+		''' drawing the main interface screen with three menu buttons '''
+		# create background
+		screen.fill(GREY)
+		screen.blit(self.graphics.loadImage(BG_IMG),(0,0))
+		# create three text buttons
+		self.graphics.makeTextButton(screen, "Last Played", 
+			50, 20, 220, 55,'Arial', 40)
+		self.graphics.makeTextButton(screen, "Select Book", 
+			50, 90, 220, 55, 'Arial', 40)
+		self.graphics.makeTextButton(screen, "Information", 
+			50, 160, 220, 55, 'Arial', 40)
+		return screen
+
 	def list_interface(self, screen, title, artist, playtime, cover):
-		'''generate screen for book selector interface'''
+		'''generate screen for library interface'''
 		# create background
 		screen.fill(GREY)
 		screen.blit(self.graphics.loadImage(BG_IMG),(0,0))
@@ -46,8 +58,9 @@ class Interface:
 		select = self.graphics.loadImage(SELECT)
 		# draw buttons to screen
 		self.graphics.makeImagebutton(screen, left, 10, 190, 45, 45)
-		self.graphics.makeImagebutton(screen, right, 65, 190, 45, 45)
-		self.graphics.makeImagebutton(screen, select, 120, 190, 45, 45)
+		self.graphics.makeImagebutton(screen, left, 155, 190, 45, 45)
+		self.graphics.makeImagebutton(screen, right, 210, 190, 45, 45)
+		self.graphics.makeImagebutton(screen, select, 265, 190, 45, 45)
 		# update actual audio book informations
 		self.graphics.Title(screen, title)
 		self.graphics.Artist(screen, artist)
@@ -66,8 +79,9 @@ class Interface:
 		play = self.graphics.loadImage(PLAY)
 		# draw buttons to screen
 		self.graphics.makeImagebutton(screen, back, 10, 190, 45, 45)
-		self.graphics.makeImagebutton(screen, pause, 65, 190, 45, 45)
-		self.graphics.makeImagebutton(screen, play, 120, 190, 45, 45)
+		self.graphics.makeImagebutton(screen, pause, 210, 190, 45, 45)
+		self.graphics.makeImagebutton(screen, play, 265, 190, 45, 45)
+		# update actual audio book informations
 		self.graphics.Title(screen, title)
 		self.graphics.Artist(screen, artist)
 		self.graphics.Cover(screen, cover, 80, 80, 220, 40)
@@ -75,7 +89,7 @@ class Interface:
 		return screen
 
 	def info_interface(self, screen, cpu, ram, hdd, ip):
-		'''generate the information screen interface'''
+		'''generate the system information screen interface'''
 		# draw background
 		screen.fill(GREY)
 		screen.blit(self.graphics.loadImage(BG_IMG),(0,0))
@@ -99,8 +113,12 @@ class Interface:
 		return screen
 
 	def exit_interface(self, screen):
+		''' draw an ĺittle exit screen with a little message '''
+		# draw background
 		screen.fill(GREY)
+		# set a bigger font
 		font = pygame.font.Font(None, 45)
+		# draw exit message
 		label = font.render("Good Bye!", 1, (WHITE))
 		screen.blit(label, (85,100))
 		return screen

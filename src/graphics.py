@@ -1,11 +1,7 @@
-#!/usr/bin/env python
-
 '''
 graphic library containing all functions needed for drawing interface 
 to screen
 '''
-#@author: Philipp Sehnert
-#@contact: philipp.sehnert[a]gmail.com
 
 # python imports
 import sys, os, time
@@ -26,6 +22,7 @@ PLAY = 'images/play.png'
 
 class Graphics:
     '''class containing drawing functions for interfaces'''
+    
     def __init__(self):
         self.font = pygame.font.SysFont('Arial', 20)
 
@@ -55,16 +52,16 @@ class Graphics:
         # return loaded image
         return image
 
-    def makeTextButton(self, screen, text, posx, posy, width, height, font, font_size):
+    def makeTextButton(self, screen, text, posx, posy, width, height, 
+        font, font_size):
+        ''' create a button with an user defined text message'''
         self.setFont(font, font_size)
         screen.blit(self.font.render(text, True, WHITE), (posx, posy))
-        #pygame.draw.rect(screen, WHITE, (posx-5, posy-5, width , height), 1)
 
     def makeImagebutton(self, screen, image, xpos, ypos, width, height):
+        ''' create a button with an image on it'''
         # draw icon
         screen.blit(pygame.transform.scale(image, (width, height)), (xpos, ypos))
-        # frame around icon
-        #pygame.draw.rect(screen, WHITE, (xpos, ypos, 31, 31), 1)
 
     def Title(self, screen, name):
         '''generate title field'''
@@ -90,17 +87,23 @@ class Graphics:
         return screen
 
     def PlayBar(self, screen, total, pos):
+        '''add usable playbar to screen showing the progress of audio file'''
         # calcultate factor for progress
         factor = str2time(total)/300
         if pos == -1: pos = 0
-        # write string to display
+        # write Time string to display
         screen.blit(self.font.render('Time: ', True, WHITE), (10, 135))
-        screen.blit(self.font.render(time2str(pos) + '/' + total, True, WHITE),
-                                     (70, 135))
-        #draw status bar for ram usage to screen 
-        pygame.draw.rect(screen, (255,255,255),pygame.Rect(pos/factor+10, 160, 5, 25),0)
-        pygame.draw.rect(screen, (255,255,255),pygame.Rect(10, 165, pos/factor, 15),0)
-        pygame.draw.rect(screen, (255,255,255), pygame.Rect(10, 165, 300, 15), 1)
+        screen.blit(self.font.render(time2str(pos) + '/' + total, True, 
+            WHITE), (70, 135))
+        # draw actual position as moving vertical rectangle to screen
+        pygame.draw.rect(screen, (255,255,255), 
+            pygame.Rect(pos/factor+10, 160, 5, 25),0)
+        # draw actual progress on screen
+        pygame.draw.rect(screen, (255,255,255), 
+            pygame.Rect(10, 165, pos/factor, 15),0)
+        # draw frame of Playbar to screen
+        pygame.draw.rect(screen, (255,255,255), 
+            pygame.Rect(10, 165, 300, 15), 1)
         return screen
 
     def spaceField(self, screen, hdd):
@@ -108,9 +111,11 @@ class Graphics:
         # write string to display
         screen.blit(self.font.render('HDD', True, WHITE), (10, 100))
         # draw rectangle indicating used disk space
-        pygame.draw.rect(screen, (255,255,255),pygame.Rect(75, 103, ((hdd[0]*100)/hdd[1])*2.35, 15),0)
+        pygame.draw.rect(screen, (255, 255, 255), 
+            pygame.Rect(75, 103, ((hdd[0]*100)/hdd[1])*2.35, 15), 0)
         # draw frame for visualize total disk space
-        pygame.draw.rect(screen, (255,255,255), pygame.Rect(75, 103, 235, 15), 1)
+        pygame.draw.rect(screen, (255, 255, 255), 
+            pygame.Rect(75, 103, 235, 15), 1)
         return screen
 
     def cpuField(self, screen, cpu):
@@ -118,8 +123,10 @@ class Graphics:
         # write string to display
         screen.blit(self.font.render('CPU', True, WHITE), (10, 50))
         #draw status bar for cpu usage to screen 
-        pygame.draw.rect(screen, (255,255,255),pygame.Rect(75, 53, ((cpu*100)/100)*2.35, 15),0)
-        pygame.draw.rect(screen, (255,255,255), pygame.Rect(75, 53, 235, 15), 1)
+        pygame.draw.rect(screen, (255 ,255, 255), 
+            pygame.Rect(75, 53, ((cpu*100)/100)*2.35, 15), 0)
+        pygame.draw.rect(screen, (255, 255, 255), 
+            pygame.Rect(75, 53, 235, 15), 1)
         return screen
 
     def RAMField(self, screen, ram):
@@ -127,8 +134,10 @@ class Graphics:
         # write string to display
         screen.blit(self.font.render('RAM ', True, WHITE), (10, 75))
         #draw status bar for ram usage to screen 
-        pygame.draw.rect(screen, (255,255,255),pygame.Rect(75, 78, ram*2.35, 15),0)
-        pygame.draw.rect(screen, (255,255,255), pygame.Rect(75, 78, 235, 15), 1)
+        pygame.draw.rect(screen, (255, 255, 255), 
+            pygame.Rect(75, 78, ram*2.35, 15), 0)
+        pygame.draw.rect(screen, (255, 255, 255), 
+            pygame.Rect(75, 78, 235, 15), 1)
         return screen
 
     def ipField(self, screen , ip):

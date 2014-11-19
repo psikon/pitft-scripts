@@ -1,22 +1,16 @@
-#!/usr/bin/env python
-
 '''
-Description
+player created a screen containing various informations about the selected 
+audio book and show the player interface on screen.
 '''
-#@author: Philipp Sehnert
-#@contact: philipp.sehnert[a]gmail.com
 
 # import python libraries
 import sys, os
 import pygame
 # import pi-gui libraries
-from graphics import Graphics
 from interfaces import Interface
 from music import Player
+from utils import pressed
 
-
-
-WHITE = (255, 255, 255)
 YELLOW = (255, 255, 0)
 
 class PlayerInterface:
@@ -24,63 +18,50 @@ class PlayerInterface:
     def __init__(self, screen, book):
       self.screen = screen
       self.clock = pygame.time.Clock()
-      self.graphics = Graphics()
       self.interface = Interface()
       self.book = book
       self.music = Player(self.book)
       
-
     def __del__(self):
       pass
 
-    def on_key(self, event, index):
-      # scroll to left
-        if event.key == pygame.K_LEFT:
-          index -=1
-          # make negative index to max index to start new round
-          if index == -1:
-            index = len(self.books) -1
-        # scroll to right
-        if event.key == pygame.K_RIGHT:
-          index = index + 1
-          # set max index to 0 for start new round 
-          if index >= len(self.books):
-            index = 0
-        # select item
-        if event.key == pygame.K_RETURN:
-          self.function(self.books[index])
-        return(index)
-
     def on_click(self):
-      click_pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
-      #now check to see if button 1 was pressed
+      '''recognize touchscreen and mouse selections to 
+      run functionalities of buttons'''
+      click_pos = pressed()
+      # stop music and return to previous screen
       if 10 <= click_pos[0] <= 55 and 190 <= click_pos[1] <= 235:
         self.music.stop()
         return False
-      #now check to see if button 2 was pressed        
-      if 65 <= click_pos[0] <= 110 and 190 <= click_pos[1] <= 235:
+      # pause/unpause the music        
+      if 210 <= click_pos[0] <= 255 and 190 <= click_pos[1] <= 235:
         self.music.pause()
-      #now check to see if button 3 was pressed
-      if 120 <= click_pos[0] <= 160 and 190 <= click_pos[1] <= 235:
+      # play/stop the music 
+      if 265 <= click_pos[0] <= 310 and 190 <= click_pos[1] <= 235:
         self.music.play()
+      # skip to selected position on the progress bar 
+      if 10 <= click_pos[0] <= 310 and 160 <= click_pos[1] <= 185:
+        self.music.set_pos(click_pos[0])
       return True
 
     def run(self):
+      '''run method for drawing the screen to dispay'''
       mainloop = True
       while mainloop:
         # Limit frame speed to 30 FPS
         self.clock.tick(30)
+        # draw interface to screen
         self.interface.player_interface(self.screen, self.book.getTitle(),
           self.book.getArtist(), self.book.getPlaytime(), 
           self.music.get_pos(), self.book.getCover())
         for event in pygame.event.get():
-          if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_BACKSPACE:
-              mainloop = False
+          # wait for touchscreen pressed
           if event.type == pygame.MOUSEBUTTONDOWN:
-            pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
-            pygame.draw.circle(self.screen, YELLOW, pos, 10, 0)
+            # draw touchscreen feedback to screen
+            pygame.draw.circle(self.screen, YELLOW, pressed(), 10, 0)
+            # run functionalities
             mainloop = self.on_click()
+        # update display
         pygame.display.flip()
 
  

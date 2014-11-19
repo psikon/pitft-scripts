@@ -4,6 +4,7 @@ is optimized for the pitft expansion board to fit inside the pitft resolution. I
 capable to play audio books in defined formats, show some facts about them like the cover
 image, scroll through a list of audiobooks and show some system informations about the 
 system. Using pygame library makes the program independent from an running x server.'''
+
 # python libraries
 import sys, os, time
 from argparse import ArgumentParser
@@ -40,7 +41,8 @@ pitft = hardware(args.pi)
 
 # define functions for main menu
 def last_played():
-	'''wrapper for the player window used by main menu'''
+	'''load the last played song from cache file and go to player 
+	window to resume '''
 	# load cache file
 	progress = load_progress()
 	# create id3tag object
@@ -57,7 +59,7 @@ def information():
 	info.run()
 
 def play_window(string):
-	'''wrapper for player window used by book selector'''
+	'''wrapper for player window used by library'''
 	player = PlayerInterface(pitft.getScreen(), string)
 	player.run()
 
@@ -72,7 +74,7 @@ def main():
 			'Select Book': book_selector,
 			'Information': information}
 	# create main menu object
-	main_menu = MainMenu(pitft.getScreen(), ['Last Played','Select Book', 'Information'], funcs, pitft)
+	main_menu = MainMenu(pitft.getScreen(), funcs, pitft)
 	# start main menu
 	main_menu.run()
 

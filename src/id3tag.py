@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-''''''
+'''id3tag load from mp3 files the tag informations and 
+save them in a class structure'''
 
 # python imports
 import sys, os
@@ -9,6 +9,7 @@ import eyeD3
 class ID3Tag:
 
 	def  __init__(self, path):
+		# load id3 tags from file
 		self.id3 = eyeD3.Mp3AudioFile(path)
 
 
