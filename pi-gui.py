@@ -16,7 +16,7 @@ from src.library import Library, Book
 from src.player import PlayerInterface
 from src.systeminfo import InfoScreen
 from src.id3tag import ID3Tag
-from src.utils import load_progress
+from src.utils import load_progress, create_library
 
 # setup argument parser
 parser = ArgumentParser(description = '%s -- audiobook interface for raspberry pi' % 
@@ -65,7 +65,9 @@ def play_window(string):
 
 def book_selector():
 	'''wrapper for media library screen'''
-	bs = Library(pitft.getScreen(), args.music, play_window)
+	bs = Library(pitft.getScreen(), 
+		create_library(os.path.abspath(args.music)), 
+		play_window)
 	bs.run()
 
 def main(): 

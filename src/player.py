@@ -33,10 +33,13 @@ class PlayerInterface:
       if 10 <= click_pos[0] <= 55 and 190 <= click_pos[1] <= 235:
         self.music.stop()
         return False
-      # pause/unpause the music        
-      if 210 <= click_pos[0] <= 255 and 190 <= click_pos[1] <= 235:
+      # pause/unpause the music
+      if 155 <= click_pos[0] <= 200 and 190 <= click_pos[1] <= 235:
         self.music.pause()
-      # play/stop the music 
+      # stop the music the music        
+      if 210 <= click_pos[0] <= 255 and 190 <= click_pos[1] <= 235:
+        self.music.stop()
+      # play the music
       if 265 <= click_pos[0] <= 310 and 190 <= click_pos[1] <= 235:
         self.music.play()
       # skip to selected position on the progress bar 
@@ -52,7 +55,7 @@ class PlayerInterface:
         self.clock.tick(30)
         # draw interface to screen
         self.interface.player_interface(self.screen, self.book.getTitle(),
-          self.book.getArtist(), self.book.getPlaytime(), 
+          self.book.getArtist(), self.book.getChapterPlaytime()[self.music.get_chapter()], 
           self.music.get_pos(), self.book.getCover())
         for event in pygame.event.get():
           # wait for touchscreen pressed

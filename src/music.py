@@ -15,18 +15,17 @@ class Player:
 
 	def __init__(self, book):
 		# init the mixer of pygame module
-		pygame.mixer.init()
+		self.mixer = pygame.mixer
+		self.mixer.init()
 		self.interface = Interface()
 		# load actual audio book object
 		self.book = book
+		self.chapter = 0
 		# set position to position in audio book class
 		self.position = self.book.getPosition()
-		# load actual audio book to mixer
-		pygame.mixer.music.load(book.getPath())
 		# set playing status
-		self.playing = pygame.mixer.music.get_busy()
+		self.playing = False
 		
-
 	def get_status(self):
 		''' get mixer status '''
 		return self.playing
@@ -36,12 +35,20 @@ class Player:
 		self.playing = bool
 
 	def play(self):
-		''' play or stop the music depnding on play status '''
-		if not pygame.mixer.music.get_busy():
-			self.set_status(True)
-			pygame.mixer.music.play(-1, self.position)
-		else:
-			self.stop()
+		''' play or stop the music depending on play status '''
+		self.mixer.music.load(self.book.getPath()[self.chapter])
+		self.mixer.music.play(0, self.position)
+		for num, song in enumerate(self.book.getPath()):
+			if num == song:
+				continue # already playing
+			pygame.mixer.music.queue(song)
+		
+	def set_chapter(self, pos):
+		print pos
+		print str2time(self.book.getChapterPlaytime()[self.chapter])
+		print self.chapter
+		if pos == str2time(self.book.getChapterPlaytime()[self.chapter]):
+			self.chapter +=1
 
 	def pause(self):
 		''' pause or unpause music depending on play status '''
@@ -58,14 +65,20 @@ class Player:
 		save_progress(self.book.getPath(), pygame.mixer.music.get_pos())
 		pygame.mixer.music.stop()
 
-
 	def get_pos(self):
 		''' get actual position of audio book '''
-		return pygame.mixer.music.get_pos()
+		if pygame.mixer.music.get_busy():
+			return (self.position * 1000) + pygame.mixer.music.get_pos()
+		else:
+			return 0
 
 	def set_pos(self, pos):
 		''' restart playing depending on selected position on playbar '''
-		factor = str2time(self.book.getPlaytime())/300
+		factor = str2time(self.book.getChapterPlaytime()[self.chapter])/300
 		self.position = (pos-10)*factor/1000
 		self.play()
+
+	def get_chapter(self):
+		return self.chapter
+		
 

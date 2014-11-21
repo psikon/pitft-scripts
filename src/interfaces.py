@@ -77,10 +77,12 @@ class Interface:
 		back = self.graphics.loadImage(PREVIOUS)
 		pause = self.graphics.loadImage(PAUSE)
 		play = self.graphics.loadImage(PLAY)
+		stop = self.graphics.loadImage(SELECT)
 		# draw buttons to screen
 		self.graphics.makeImagebutton(screen, back, 10, 190, 45, 45)
-		self.graphics.makeImagebutton(screen, pause, 210, 190, 45, 45)
+		self.graphics.makeImagebutton(screen, pause, 155, 190, 45, 45)
 		self.graphics.makeImagebutton(screen, play, 265, 190, 45, 45)
+		self.graphics.makeImagebutton(screen, stop, 210, 190, 45, 45)
 		# update actual audio book informations
 		self.graphics.Title(screen, title)
 		self.graphics.Artist(screen, artist)

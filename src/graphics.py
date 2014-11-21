@@ -38,7 +38,10 @@ class Graphics:
     def loadImage(self, filename, colorkey = None):
         '''function for loading pictures with and without alpha channel'''
         # load picture
-        image = pygame.image.load(filename)
+        try:
+            image = pygame.image.load(filename)
+        except:
+            image = pygame.image.load('images/unknown.jpg')
         # convert picture with or without alpha channel
         if image.get_alpha() == None:
             image = image.convert()
@@ -97,10 +100,10 @@ class Graphics:
             WHITE), (70, 135))
         # draw actual position as moving vertical rectangle to screen
         pygame.draw.rect(screen, (255,255,255), 
-            pygame.Rect(pos/factor+10, 160, 5, 25),0)
+            pygame.Rect((pos/factor)+10, 160, 5, 25),0)
         # draw actual progress on screen
         pygame.draw.rect(screen, (255,255,255), 
-            pygame.Rect(10, 165, pos/factor, 15),0)
+            pygame.Rect(10, 165, (pos/factor), 15),0)
         # draw frame of Playbar to screen
         pygame.draw.rect(screen, (255,255,255), 
             pygame.Rect(10, 165, 300, 15), 1)

@@ -10,6 +10,7 @@ import pygame
 # needed for save methods
 import ConfigParser
 from id3tag import ID3Tag
+from book import Book
 
 def str2time(string):
 	''' converts a string into an integer of milliseconds '''
@@ -63,13 +64,29 @@ def timer():
 	''''''
 	pass
 
-def create_library():
+def create_library(music_folder):
 	''''''
-	pass
+	library = []
+	for root, dirs, files in os.walk(music_folder):
+		chapter = []
+		for file in files:
+			if file.endswith('.mp3'):
+				chapter.append(os.path.join(root, file))
+		chapter.sort()
+		totalPlaytime = 0 
+		chapterPlaytime = []
+		for item in chapter:
+			id3 = ID3Tag(item)
+			totalPlaytime += str2time(id3.getPlaytime())
+			chapterPlaytime.append(id3.getPlaytime())
+		library.append(Book(chapter, id3.getTitle(), id3.getArtist(), id3.getAlbum(), 
+			chapterPlaytime, time2str(totalPlaytime), 0, find_cover(root)))	
+	return library
 
-def find_cover():
-	''''''
-	pass
+def find_cover(path):
+	for file in os.listdir(path):
+		if file.endswith(('.png', '.jpg', '.jpeg')):
+			return os.path.join(path, file)
 
 def pressed():
 	'''get x and y coordinated of a touchscreen press'''
