@@ -109,6 +109,12 @@ class Graphics:
             pygame.Rect(10, 165, 300, 15), 1)
         return screen
 
+    def Chapter(self, screen, actualChapter, totalChapter):
+        screen.blit(self.font.render('Chapter: ', True, WHITE), (10, 100))
+        screen.blit(self.font.render(" %d/%d" % (actualChapter, totalChapter), True,
+          WHITE), (85, 100))
+        return screen
+
     def spaceField(self, screen, hdd):
         '''draw disk usage status bar'''
         # write string to display

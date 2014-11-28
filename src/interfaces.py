@@ -13,9 +13,13 @@ WHITE = (255, 255, 255)
 GREY = (64,64,64)
 # define path to images
 BG_IMG = "images/bg_alpha.png"
-PREVIOUS = 'images/previous.png'
-NEXT = 'images/next.png'
+BACK = 'images/back.png'
+LEFT = 'images/left.png'
+RIGHT = 'images/right.png'
 SELECT = 'images/select.png'
+NEXT = 'images/next.png'
+PREVIOUS = 'images/previous.png'
+STOP = 'images/stop.png'
 PAUSE = 'images/pause.png'
 PLAY = 'images/play.png'
 
@@ -53,11 +57,12 @@ class Interface:
 		screen.fill(GREY)
 		screen.blit(self.graphics.loadImage(BG_IMG),(0,0))
 		# load button images
-		left = self.graphics.loadImage(PREVIOUS)
-		right = self.graphics.loadImage(NEXT)
+		back = self.graphics.loadImage(BACK)
+		left = self.graphics.loadImage(LEFT)
+		right = self.graphics.loadImage(RIGHT)
 		select = self.graphics.loadImage(SELECT)
 		# draw buttons to screen
-		self.graphics.makeImagebutton(screen, left, 10, 190, 45, 45)
+		self.graphics.makeImagebutton(screen, back, 10, 190, 45, 45)
 		self.graphics.makeImagebutton(screen, left, 155, 190, 45, 45)
 		self.graphics.makeImagebutton(screen, right, 210, 190, 45, 45)
 		self.graphics.makeImagebutton(screen, select, 265, 190, 45, 45)
@@ -68,24 +73,30 @@ class Interface:
 		self.graphics.Cover(screen, cover, 150, 150, 155, 40)  
 		return screen
 
-	def player_interface(self, screen, title, artist, playtime, music_pos, cover):
+	def player_interface(self, screen, title, artist, actualChapter, totalChapter,
+		playtime, music_pos, cover):
 		'''generate the interface for the audio player'''
 		# create background
 		screen.fill(GREY)
 		screen.blit(self.graphics.loadImage(BG_IMG),(0,0))
 		# load images for buttons
-		back = self.graphics.loadImage(PREVIOUS)
+		back = self.graphics.loadImage(BACK)
+		backward = self.graphics.loadImage(PREVIOUS)
+		forward = self.graphics.loadImage(NEXT)
 		pause = self.graphics.loadImage(PAUSE)
 		play = self.graphics.loadImage(PLAY)
-		stop = self.graphics.loadImage(SELECT)
+		stop = self.graphics.loadImage(STOP)
 		# draw buttons to screen
 		self.graphics.makeImagebutton(screen, back, 10, 190, 45, 45)
-		self.graphics.makeImagebutton(screen, pause, 155, 190, 45, 45)
+		self.graphics.makeImagebutton(screen, backward, 65, 190, 45, 45)
+		self.graphics.makeImagebutton(screen, forward, 115, 190, 45, 45)
+		self.graphics.makeImagebutton(screen, pause, 165, 190, 45, 45)
+		self.graphics.makeImagebutton(screen, stop, 215, 190, 45, 45)
 		self.graphics.makeImagebutton(screen, play, 265, 190, 45, 45)
-		self.graphics.makeImagebutton(screen, stop, 210, 190, 45, 45)
 		# update actual audio book informations
 		self.graphics.Title(screen, title)
 		self.graphics.Artist(screen, artist)
+		self.graphics.Chapter(screen, actualChapter, totalChapter)
 		self.graphics.Cover(screen, cover, 80, 80, 220, 40)
 		self.graphics.PlayBar(screen, playtime, music_pos)
 		return screen

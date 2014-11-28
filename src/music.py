@@ -11,7 +11,10 @@ import pygame
 from interfaces import Interface
 from utils import save_progress, str2time
 
+NEXT_CHAPTER = pygame.USEREVENT
+
 class Player:
+
 
 	def __init__(self, book):
 		# init the mixer of pygame module
@@ -20,11 +23,13 @@ class Player:
 		self.interface = Interface()
 		# load actual audio book object
 		self.book = book
-		self.chapter = 0
 		# set position to position in audio book class
 		self.position = self.book.getPosition()
 		# set playing status
 		self.playing = False
+		self.chapter = 0
+		
+
 		
 	def get_status(self):
 		''' get mixer status '''
@@ -36,19 +41,8 @@ class Player:
 
 	def play(self):
 		''' play or stop the music depending on play status '''
-		self.mixer.music.load(self.book.getPath()[self.chapter])
-		self.mixer.music.play(0, self.position)
-		for num, song in enumerate(self.book.getPath()):
-			if num == song:
-				continue # already playing
-			pygame.mixer.music.queue(song)
-		
-	def set_chapter(self, pos):
-		print pos
-		print str2time(self.book.getChapterPlaytime()[self.chapter])
-		print self.chapter
-		if pos == str2time(self.book.getChapterPlaytime()[self.chapter]):
-			self.chapter +=1
+		pygame.mixer.music.set_endevent(pygame.USEREVENT)
+		self.play_next_chapter()
 
 	def pause(self):
 		''' pause or unpause music depending on play status '''
@@ -74,11 +68,23 @@ class Player:
 
 	def set_pos(self, pos):
 		''' restart playing depending on selected position on playbar '''
-		factor = str2time(self.book.getChapterPlaytime()[self.chapter])/300
+		factor = str2time(self.book.getChapterPlaytime()[self.get_chapter()])/300
 		self.position = (pos-10)*factor/1000
-		self.play()
+		self.play_next_chapter()
 
 	def get_chapter(self):
 		return self.chapter
-		
 
+	def previous_chapter(self):
+		self.chapter -= 1
+		self.position = 0
+		self.play()
+		
+	def next_chapter(self):
+		self.chapter += 1
+		self.position = 0
+		self.play()
+
+	def play_next_chapter(self):
+		self.mixer.music.load(self.book.getPath()[self.get_chapter()])
+		self.mixer.music.play(0, self.position)

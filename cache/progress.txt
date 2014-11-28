@@ -1,4 +1,4 @@
 [Progress]
-path = ['/home/psehnert/workspace/music/example.mp3']
-position = -1
+path = ['/home/psehnert/workspace/music/018_und die Geisterinsel/01 Die drei ___ 18 - und die Geis.mp3', '/home/psehnert/workspace/music/018_und die Geisterinsel/02 Die drei ___ 18 - und die Geis.mp3', '/home/psehnert/workspace/music/018_und die Geisterinsel/03 Die drei ___ 18 - und die Geis.mp3', '/home/psehnert/workspace/music/018_und die Geisterinsel/04 Die drei ___ 18 - und die Geis.mp3']
+position = 3043
 

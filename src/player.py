@@ -33,11 +33,17 @@ class PlayerInterface:
       if 10 <= click_pos[0] <= 55 and 190 <= click_pos[1] <= 235:
         self.music.stop()
         return False
+      # play previous chapter
+      if 65 <= click_pos[0] <= 110 and 190 <= click_pos[1] <= 235:
+        self.music.previous_chapter()
+      # play next chapter
+      if 115 <= click_pos[0] <= 160 and 190 <= click_pos[1] <= 235:
+        self.music.next_chapter()
       # pause/unpause the music
-      if 155 <= click_pos[0] <= 200 and 190 <= click_pos[1] <= 235:
+      if 165 <= click_pos[0] <= 210 and 190 <= click_pos[1] <= 235:
         self.music.pause()
       # stop the music the music        
-      if 210 <= click_pos[0] <= 255 and 190 <= click_pos[1] <= 235:
+      if 215 <= click_pos[0] <= 260 and 190 <= click_pos[1] <= 235:
         self.music.stop()
       # play the music
       if 265 <= click_pos[0] <= 310 and 190 <= click_pos[1] <= 235:
@@ -55,9 +61,12 @@ class PlayerInterface:
         self.clock.tick(30)
         # draw interface to screen
         self.interface.player_interface(self.screen, self.book.getTitle(),
-          self.book.getArtist(), self.book.getChapterPlaytime()[self.music.get_chapter()], 
+          self.book.getArtist(), self.music.get_chapter() + 1, len(self.book.getPath()),
+          self.book.getChapterPlaytime()[self.music.get_chapter()], 
           self.music.get_pos(), self.book.getCover())
         for event in pygame.event.get():
+          if event.type == pygame.USEREVENT:
+            self.music.next_chapter()
           # wait for touchscreen pressed
           if event.type == pygame.MOUSEBUTTONDOWN:
             # draw touchscreen feedback to screen
