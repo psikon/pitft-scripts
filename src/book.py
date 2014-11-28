@@ -1,12 +1,13 @@
 class Book:
     '''class for storing all relevant facts about an audio book'''
 
-    def __init__(self, path, title, artist, album, chapterPlaytime, totalPlaytime, 
-      position, cover):
+    def __init__(self, path, title, artist, album, chapter, chapterPlaytime, 
+      totalPlaytime, position, cover):
       self.path = path
       self.title = title
       self.artist = artist
       self.album = album
+      self.chapter = chapter
       self.chapterPlaytime = chapterPlaytime
       self.totalPlaytime = totalPlaytime
       self.position = float(position)
@@ -15,8 +16,11 @@ class Book:
     def getPath(self):
       return self.path
       
-    def getChapter(self):
+    def get_num_chapter(self):
       return len(self.path)
+
+    def get_chapter(self):
+      return self.chapter
 
     def getTitle(self):
       return self.title

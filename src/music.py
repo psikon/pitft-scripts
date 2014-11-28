@@ -23,13 +23,11 @@ class Player:
 		self.interface = Interface()
 		# load actual audio book object
 		self.book = book
+		self.chapter = self.book.get_chapter()
 		# set position to position in audio book class
 		self.position = self.book.getPosition()
 		# set playing status
 		self.playing = False
-		self.chapter = 0
-		
-
 		
 	def get_status(self):
 		''' get mixer status '''
@@ -56,7 +54,8 @@ class Player:
 	def stop(self):
 		''' stop actual playing an store path and position to cache file '''
 		self.set_status(False)
-		save_progress(self.book.getPath(), pygame.mixer.music.get_pos())
+		save_progress(self.book.getPath(), self.get_chapter(), 
+			pygame.mixer.music.get_pos(), self.book.getCover())
 		pygame.mixer.music.stop()
 
 	def get_pos(self):
@@ -76,15 +75,21 @@ class Player:
 		return self.chapter
 
 	def previous_chapter(self):
-		self.chapter -= 1
-		self.position = 0
-		self.play()
+		if not self.chapter == 0: 
+			self.chapter -= 1
+			self.position = 0
+			self.play()
+		else:
+			self.stop()
 		
 	def next_chapter(self):
-		self.chapter += 1
-		self.position = 0
-		self.play()
+		if not self.chapter == len(self.book.getPath()) - 1: 
+			self.chapter += 1
+			self.position = 0
+			self.play()
+		else:
+			self.stop()
 
 	def play_next_chapter(self):
 		self.mixer.music.load(self.book.getPath()[self.get_chapter()])
-		self.mixer.music.play(0, self.position)
+		self.mixer.music.play(1, self.position)

@@ -14,6 +14,7 @@ GREY = (64,64,64)
 # define path to images
 BG_IMG = "images/bg_alpha.png"
 BACK = 'images/back.png'
+EXIT = 'images/exit.png'
 LEFT = 'images/left.png'
 RIGHT = 'images/right.png'
 SELECT = 'images/select.png'
@@ -111,9 +112,9 @@ class Interface:
 		screen.blit(self.font.render('System Information', True, WHITE), (10, 10))
 		self.setFont('Arial', 14)
 		# load and draw button interface
-		back = self.graphics.loadImage(PREVIOUS)
+		back = self.graphics.loadImage(BACK)
 		self.graphics.makeImagebutton(screen, back, 10, 190, 45, 45)
-		exit = self.graphics.loadImage(SELECT)
+		exit = self.graphics.loadImage(EXIT)
 		screen.blit(self.font.render('close gui', True, WHITE), (260, 170))
 		self.graphics.makeImagebutton(screen, exit, 265, 190, 45, 45)
 		self.setFont('Arial', 20)

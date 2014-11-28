@@ -32,7 +32,7 @@ def time2str(time):
 	h,m = divmod(m, 60)
 	return '%d:%d:%d' % (h,m,s)
 
-def save_progress(path, position):
+def save_progress(path, chapter, position, cover):
 	''' save the progress of an audiobook after stop to a file containing 
 	path and actual position at stop '''
 	# create new config parser object
@@ -41,8 +41,10 @@ def save_progress(path, position):
 	progress = open('cache/progress.txt','w')
 	# create section and arguments
 	Config.add_section('Progress')
-	Config.set('Progress','path',path)
+	Config.set('Progress','path', path)
+	Config.set('Progress', 'chapter', chapter)
 	Config.set('Progress','position', position)
+	Config.set('Progress', 'cover', cover)
 	# write settings to file
 	Config.write(progress)
 	# close file
@@ -56,9 +58,11 @@ def load_progress():
 	# read the cache file
 	Config.read('cache/progress.txt')
 	# extract path and position
-	path = Config.get('Progress','path')
+	path = Config.get('Progress','path').translate(None, "'[]").split(', ')
+	chapter = Config.get('Progress','chapter')
 	position = Config.get('Progress', 'position')
-	return [path, position]
+	cover = Config.get('Progress','cover')
+	return [path, chapter, position, cover]
 
 def timer():
 	''''''
@@ -80,7 +84,7 @@ def create_library(music_folder):
 			totalPlaytime += str2time(id3.getPlaytime())
 			chapterPlaytime.append(id3.getPlaytime())
 		library.append(Book(chapter, id3.getTitle(), id3.getArtist(), id3.getAlbum(), 
-			chapterPlaytime, time2str(totalPlaytime), 0, find_cover(root)))	
+			0, chapterPlaytime, time2str(totalPlaytime), 0, find_cover(root)))	
 	return library
 
 def find_cover(path):

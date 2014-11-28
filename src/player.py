@@ -61,7 +61,7 @@ class PlayerInterface:
         self.clock.tick(30)
         # draw interface to screen
         self.interface.player_interface(self.screen, self.book.getTitle(),
-          self.book.getArtist(), self.music.get_chapter() + 1, len(self.book.getPath()),
+          self.book.getArtist(), self.music.get_chapter() + 1, self.book.get_num_chapter(),
           self.book.getChapterPlaytime()[self.music.get_chapter()], 
           self.music.get_pos(), self.book.getCover())
         for event in pygame.event.get():

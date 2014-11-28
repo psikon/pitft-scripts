@@ -16,7 +16,7 @@ from src.library import Library, Book
 from src.player import PlayerInterface
 from src.systeminfo import InfoScreen
 from src.id3tag import ID3Tag
-from src.utils import load_progress, create_library
+from src.utils import load_progress, create_library, str2time
 
 # setup argument parser
 parser = ArgumentParser(description = '%s -- audiobook interface for raspberry pi' % 
@@ -45,11 +45,17 @@ def last_played():
 	window to resume '''
 	# load cache file
 	progress = load_progress()
+	chapterPlaytime = []
+	totalPlaytime = 0
+	for item in progress[0]:
+		id3 = ID3Tag(item)
+		totalPlaytime += str2time(id3.getPlaytime())
+		chapterPlaytime.append(id3.getPlaytime())
 	# create id3tag object
-	id3 = ID3Tag(progress[0])
+	id3 = ID3Tag(progress[0][0])
 	# create book object with id3 tags and actual position
 	book = Book(progress[0], id3.getTitle(), id3.getArtist(), id3.getAlbum(),
-	 id3.getPlaytime(), int(progress[1])/1000, "images/unknown.jpg")
+	 int(progress[1]), chapterPlaytime, totalPlaytime, int(progress[2])/1000, progress[3])
 	player = PlayerInterface(pitft.getScreen(), book)
 	player.run()
 
