@@ -57,7 +57,7 @@ def load_progress():
 	Config = ConfigParser.ConfigParser()
 	# read the cache file
 	Config.read('cache/progress.txt')
-	# extract path and position
+	# extract path. chapter, position and path to cover
 	path = Config.get('Progress','path').translate(None, "'[]").split(', ')
 	chapter = Config.get('Progress','chapter')
 	position = Config.get('Progress', 'position')
@@ -69,26 +69,43 @@ def timer():
 	pass
 
 def create_library(music_folder):
-	''''''
+	'''walk through the music folder, searching for audio books and 
+	their chapters and create a library of all audio books'''
+	# init empty library
 	library = []
+	# walk through the music folder
 	for root, dirs, files in os.walk(music_folder):
+		# init empty chapter list
 		chapter = []
-		for file in files:
-			if file.endswith('.mp3'):
-				chapter.append(os.path.join(root, file))
-		chapter.sort()
-		totalPlaytime = 0 
-		chapterPlaytime = []
-		for item in chapter:
-			id3 = ID3Tag(item)
-			totalPlaytime += str2time(id3.getPlaytime())
-			chapterPlaytime.append(id3.getPlaytime())
-		library.append(Book(chapter, id3.getTitle(), id3.getArtist(), id3.getAlbum(), 
-			0, chapterPlaytime, time2str(totalPlaytime), 0, find_cover(root)))	
+		# only add if folder is not empty
+		if len(files) > 0:
+			# find every file in folder
+			for file in files:
+				# select only audio files
+				if file.endswith('.mp3'):
+					# add every audio file to chapter arry
+					chapter.append(os.path.join(root, file))
+			# sort the chapters by chapter number in file name
+			chapter.sort()
+			# init total playtime and chapter playtimes
+			totalPlaytime = 0 
+			chapterPlaytime = []
+			# load for every audio file the id3 tags and determine 
+			# the total and chapter playtimes
+			for item in chapter:
+				id3 = ID3Tag(item)
+				totalPlaytime += str2time(id3.getPlaytime())
+				chapterPlaytime.append(id3.getPlaytime())
+			# add audio book to library
+			library.append(Book(chapter, id3.getTitle(), id3.getArtist(), id3.getAlbum(), 
+				0, chapterPlaytime, time2str(totalPlaytime), 0, find_cover(root)))	
 	return library
 
 def find_cover(path):
+	'''search in actual folder for image files for showing cover'''
+	# walk throuugh folder
 	for file in os.listdir(path):
+		# find image file
 		if file.endswith(('.png', '.jpg', '.jpeg')):
 			return os.path.join(path, file)
 
