@@ -9,7 +9,7 @@ import pygame
 
 # pi-gui imports
 from interfaces import Interface
-from utils import save_progress, str2time
+from utils import save_progress, str2time, timer
 
 NEXT_CHAPTER = pygame.USEREVENT
 
@@ -25,7 +25,7 @@ class Player:
 		self.book = book
 		self.chapter = self.book.get_chapter()
 		# set position to position in audio book class
-		self.position = self.book.getPosition()
+		self.position = self.book.get_pos()
 		# set playing status
 		self.playing = False
 		
@@ -54,8 +54,8 @@ class Player:
 	def stop(self):
 		''' stop actual playing an store path and position to cache file '''
 		self.set_status(False)
-		save_progress(self.book.getPath(), self.get_chapter(), 
-			pygame.mixer.music.get_pos(), self.book.getCover())
+		save_progress(self.book.get_path(), self.get_chapter(), 
+			pygame.mixer.music.get_pos(), self.book.get_cover())
 		pygame.mixer.music.stop()
 
 	def get_pos(self):
@@ -67,7 +67,7 @@ class Player:
 
 	def set_pos(self, pos):
 		''' restart playing depending on selected position on playbar '''
-		factor = str2time(self.book.getChapterPlaytime()[self.get_chapter()])/300
+		factor = str2time(self.book.get_chapter_playtime()[self.get_chapter()])/300
 		self.position = (pos-10)*factor/1000
 		self.play_next_chapter()
 
@@ -83,7 +83,7 @@ class Player:
 			self.stop()
 		
 	def next_chapter(self):
-		if not self.chapter == len(self.book.getPath()) - 1: 
+		if not self.chapter == len(self.book.get_path()) - 1: 
 			self.chapter += 1
 			self.position = 0
 			self.play()
@@ -91,5 +91,5 @@ class Player:
 			self.stop()
 
 	def play_next_chapter(self):
-		self.mixer.music.load(self.book.getPath()[self.get_chapter()])
+		self.mixer.music.load(self.book.get_path()[self.get_chapter()])
 		self.mixer.music.play(1, self.position)

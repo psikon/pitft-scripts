@@ -27,41 +27,31 @@ PLAY = 'images/play.png'
 class Interface:
 
 	def __init__(self):
-		self.font = pygame.font.SysFont('Arial', 20)
 		self.graphics = Graphics()
 
-	def getFont(self):
-		''' return actual font '''
-		return self.font
-
-	def setFont(self, font, font_size):
-		''' set new font and size '''
-		self.font = pygame.font.SysFont(font, font_size)
 
 	def main_interface(self, screen):
 		''' drawing the main interface screen with three menu buttons '''
 		# create background
 		screen.fill(GREY)
-		screen.blit(self.graphics.loadImage(BG_IMG),(0,0))
+		screen.blit(self.graphics.load_image(BG_IMG),(0,0))
 		# create three text buttons
 		self.graphics.makeTextButton(screen, "Last Played", 
-			50, 20, 220, 55,'Arial', 40)
+			50, 20, 220, 55, 40)
 		self.graphics.makeTextButton(screen, "Select Book", 
-			50, 90, 220, 55, 'Arial', 40)
-		self.graphics.makeTextButton(screen, "Information", 
-			50, 160, 220, 55, 'Arial', 40)
+			50, 90, 220, 55, 40)
 		return screen
 
 	def list_interface(self, screen, title, artist, playtime, cover):
 		'''generate screen for library interface'''
 		# create background
 		screen.fill(GREY)
-		screen.blit(self.graphics.loadImage(BG_IMG),(0,0))
+		screen.blit(self.graphics.load_image(BG_IMG),(0,0))
 		# load button images
-		back = self.graphics.loadImage(BACK)
-		left = self.graphics.loadImage(LEFT)
-		right = self.graphics.loadImage(RIGHT)
-		select = self.graphics.loadImage(SELECT)
+		back = self.graphics.load_image(BACK)
+		left = self.graphics.load_image(LEFT)
+		right = self.graphics.load_image(RIGHT)
+		select = self.graphics.load_image(SELECT)
 		# draw buttons to screen
 		self.graphics.makeImagebutton(screen, back, 10, 190, 45, 45)
 		self.graphics.makeImagebutton(screen, left, 155, 190, 45, 45)
@@ -71,7 +61,7 @@ class Interface:
 		self.graphics.Title(screen, title)
 		self.graphics.Artist(screen, artist)
 		self.graphics.PlayTime(screen, playtime)
-		self.graphics.Cover(screen, cover, 150, 150, 155, 40)  
+		self.graphics.Cover(screen, cover, 140, 140, 155, 40)  
 		return screen
 
 	def player_interface(self, screen, title, artist, actualChapter, totalChapter,
@@ -79,14 +69,14 @@ class Interface:
 		'''generate the interface for the audio player'''
 		# create background
 		screen.fill(GREY)
-		screen.blit(self.graphics.loadImage(BG_IMG),(0,0))
+		screen.blit(self.graphics.load_image(BG_IMG),(0,0))
 		# load images for buttons
-		back = self.graphics.loadImage(BACK)
-		backward = self.graphics.loadImage(PREVIOUS)
-		forward = self.graphics.loadImage(NEXT)
-		pause = self.graphics.loadImage(PAUSE)
-		play = self.graphics.loadImage(PLAY)
-		stop = self.graphics.loadImage(STOP)
+		back = self.graphics.load_image(BACK)
+		backward = self.graphics.load_image(PREVIOUS)
+		forward = self.graphics.load_image(NEXT)
+		pause = self.graphics.load_image(PAUSE)
+		play = self.graphics.load_image(PLAY)
+		stop = self.graphics.load_image(STOP)
 		# draw buttons to screen
 		self.graphics.makeImagebutton(screen, back, 10, 190, 45, 45)
 		self.graphics.makeImagebutton(screen, backward, 65, 190, 45, 45)
@@ -100,30 +90,6 @@ class Interface:
 		self.graphics.Chapter(screen, actualChapter, totalChapter)
 		self.graphics.Cover(screen, cover, 80, 80, 220, 40)
 		self.graphics.PlayBar(screen, playtime, music_pos)
-		return screen
-
-	def info_interface(self, screen, cpu, ram, hdd, ip):
-		'''generate the system information screen interface'''
-		# draw background
-		screen.fill(GREY)
-		screen.blit(self.graphics.loadImage(BG_IMG),(0,0))
-		# draw title
-		self.setFont('Arial', 30)
-		screen.blit(self.font.render('System Information', True, WHITE), (10, 10))
-		self.setFont('Arial', 14)
-		# load and draw button interface
-		back = self.graphics.loadImage(BACK)
-		self.graphics.makeImagebutton(screen, back, 10, 190, 45, 45)
-		exit = self.graphics.loadImage(EXIT)
-		screen.blit(self.font.render('close gui', True, WHITE), (260, 170))
-		self.graphics.makeImagebutton(screen, exit, 265, 190, 45, 45)
-		self.setFont('Arial', 20)
-		# draw system information fields
-		self.graphics.cpuField(screen, cpu)
-		self.graphics.RAMField(screen, ram)
-		self.graphics.spaceField(screen, hdd) 
-		self.graphics.ipField(screen, ip)
-		self.graphics.authorField(screen)
 		return screen
 
 	def exit_interface(self, screen):

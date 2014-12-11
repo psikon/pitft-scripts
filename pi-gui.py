@@ -59,11 +59,6 @@ def last_played():
 	player = PlayerInterface(pitft.getScreen(), book)
 	player.run()
 
-def information():
-	'''wrapper for the system information screen'''
-	info = InfoScreen(pitft.getScreen(), args.music)
-	info.run()
-
 def play_window(string):
 	'''wrapper for player window used by library'''
 	player = PlayerInterface(pitft.getScreen(), string)
@@ -79,8 +74,7 @@ def book_selector():
 def main(): 
 	# register main menu functions
 	funcs = {'Continue': last_played,
-			'Select Book': book_selector,
-			'Information': information}
+			'Select Book': book_selector}
 	# create main menu object
 	main_menu = MainMenu(pitft.getScreen(), funcs, pitft)
 	# start main menu

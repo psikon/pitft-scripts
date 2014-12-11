@@ -13,7 +13,7 @@ class Book:
       self.position = float(position)
       self.cover = cover
 
-    def getPath(self):
+    def get_path(self):
       return self.path
       
     def get_num_chapter(self):
@@ -22,26 +22,26 @@ class Book:
     def get_chapter(self):
       return self.chapter
 
-    def getTitle(self):
+    def get_title(self):
       return self.title
     
-    def getArtist(self):
+    def get_artist(self):
       return self.artist
 
-    def getAlbum(self):
+    def get_album(self):
       return self.getAlbum
 
-    def getChapterPlaytime(self):
+    def get_chapter_playtime(self):
       return self.chapterPlaytime
       
-    def getTotalPlaytime(self):
+    def get_total_playtime(self):
       return self.totalPlaytime
 
-    def getPosition(self):
+    def get_pos(self):
       return self.position
 
-    def setPosition(self, milliseconds):
+    def set_pos(self, milliseconds):
       self.position = milliseconds
 
-    def getCover(self):
+    def get_cover(self):
       return self.cover

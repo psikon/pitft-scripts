@@ -70,8 +70,8 @@ class Library:
         for event in pygame.event.get():
           # draw interface on screen
           self.interface.list_interface(self.screen, 
-            self.library[index].getTitle(), self.library[index].getArtist(),
-            self.library[index].getTotalPlaytime(), self.library[index].getCover())
+            self.library[index].get_title(), self.library[index].get_artist(),
+            self.library[index].get_total_playtime(), self.library[index].get_cover())
           # wit for touchscreen event
           if event.type == pygame.MOUSEBUTTONDOWN:
             # draw circle for touchscreen feedback

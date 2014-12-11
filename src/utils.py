@@ -9,6 +9,7 @@ import sys, os
 import pygame
 # needed for save methods
 import ConfigParser
+from threading import Timer
 from id3tag import ID3Tag
 from book import Book
 
@@ -64,9 +65,13 @@ def load_progress():
 	cover = Config.get('Progress','cover')
 	return [path, chapter, position, cover]
 
+def timeout():
+	print "game over"
+
 def timer():
 	''''''
-	pass
+	t = Timer(1*5,timeout() )
+	t.start
 
 def create_library(music_folder):
 	'''walk through the music folder, searching for audio books and 

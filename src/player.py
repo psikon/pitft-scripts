@@ -9,7 +9,7 @@ import pygame
 # import pi-gui libraries
 from interfaces import Interface
 from music import Player
-from utils import pressed
+from utils import pressed, timer
 
 YELLOW = (255, 255, 0)
 
@@ -60,10 +60,10 @@ class PlayerInterface:
         # Limit frame speed to 30 FPS
         self.clock.tick(30)
         # draw interface to screen
-        self.interface.player_interface(self.screen, self.book.getTitle(),
-          self.book.getArtist(), self.music.get_chapter() + 1, self.book.get_num_chapter(),
-          self.book.getChapterPlaytime()[self.music.get_chapter()], 
-          self.music.get_pos(), self.book.getCover())
+        self.interface.player_interface(self.screen, self.book.get_title(),
+          self.book.get_artist(), self.music.get_chapter() + 1, self.book.get_num_chapter(),
+          self.book.get_chapter_playtime()[self.music.get_chapter()], 
+          self.music.get_pos(), self.book.get_cover())
         for event in pygame.event.get():
           if event.type == pygame.USEREVENT:
             self.music.next_chapter()
