@@ -44,36 +44,36 @@ def last_played(book):
 	'''load the last played song from cache file and go to player 
 	window to resume '''
 	# load cache file
-	player = PlayerInterface(pitft.getScreen(), book)
+	player = PlayerInterface(pitft.get_screen(), book)
 	player.run()
 
 def play_window(string):
 	'''load the last played song from cache file and go to player 
 	window to resume '''
 	# load cache file
-	player = PlayerInterface(pitft.getScreen(), string)
+	player = PlayerInterface(pitft.get_screen(), string)
 	player.run()
 	
 def book_selector():
 	'''wrapper for media library screen'''
-	bs = Library(pitft.getScreen(), 
+	bs = Library(pitft.get_screen(), 
 		create_library(os.path.abspath(args.music)), 
 		play_window)
 	bs.run()
 
 def load_cache():
 	progress = load_progress()
-	chapterPlaytime = []
-	totalPlaytime = 0
+	chapter_playtime = []
+	total_playtime = 0
 	for item in progress[0]:
 		id3 = ID3Tag(item)
-		totalPlaytime += str2time(id3.getPlaytime())
-		chapterPlaytime.append(id3.getPlaytime())
+		total_playtime += str2time(id3.get_playtime())
+		chapter_playtime.append(id3.get_playtime())
 	# create id3tag object
 	id3 = ID3Tag(progress[0][0])
 	# create book object with id3 tags and actual position
-	book = Book(progress[0], id3.getTitle(), id3.getArtist(), id3.getAlbum(),
-	 int(progress[1]), chapterPlaytime, totalPlaytime, int(progress[2])/1000, 
+	book = Book(progress[0], id3.get_title(), id3.get_artist(), id3.get_album(),
+	 int(progress[1]), chapter_playtime, total_playtime, int(progress[2])/1000, 
 	 progress[3])
 	return book
 
@@ -82,7 +82,7 @@ def main():
 	funcs = {'Continue': last_played,
 			'Select Book': book_selector}
 	# create main menu object
-	main_menu = MainMenu(pitft.getScreen(), funcs, pitft, load_cache())
+	main_menu = MainMenu(pitft.get_screen(), funcs, pitft, load_cache())
 	# start main menu
 	main_menu.run()
 

@@ -51,17 +51,7 @@ class hardware:
     def __del__(self):
         pass
 
-    def getScreen(self):
+    def get_screen(self):
     	return(self.screen)
 	
-	def LEFT(self):
-		if GPIO.input(22):
-			print "22"
-		return self.left
-
-	def RIGHT(self):
-		return self.right
-
-	def SELECT(self):
-		return self.select
 

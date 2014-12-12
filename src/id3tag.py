@@ -13,17 +13,17 @@ class ID3Tag:
 		self.id3 = eyeD3.Mp3AudioFile(path)
 
 
-	def getTitle(self):
+	def get_title(self):
 		return self.id3.tag.getTitle()
 
-	def getAlbum(self):
+	def get_album(self):
 		return self.id3.tag.getAlbum()
 
-	def getArtist(self):
+	def get_artist(self):
 		return self.id3.tag.getArtist()
 
-	def getPlaytime(self):
+	def get_playtime(self):
 		return self.id3.getPlayTimeString()
 
-	def getYear(self):
+	def get_year(self):
 		return self.id3.getYear()

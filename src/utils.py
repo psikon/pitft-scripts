@@ -93,17 +93,18 @@ def create_library(music_folder):
 			# sort the chapters by chapter number in file name
 			chapter.sort()
 			# init total playtime and chapter playtimes
-			totalPlaytime = 0 
-			chapterPlaytime = []
+			total_playtime = 0 
+			chapter_playtime = []
 			# load for every audio file the id3 tags and determine 
 			# the total and chapter playtimes
 			for item in chapter:
 				id3 = ID3Tag(item)
-				totalPlaytime += str2time(id3.getPlaytime())
-				chapterPlaytime.append(id3.getPlaytime())
+				total_playtime += str2time(id3.get_playtime())
+				chapter_playtime.append(id3.get_playtime())
 			# add audio book to library
-			library.append(Book(chapter, id3.getTitle(), id3.getArtist(), id3.getAlbum(), 
-				0, chapterPlaytime, time2str(totalPlaytime), 0, find_cover(root)))	
+			library.append(Book(chapter, id3.get_title(), id3.get_artist(), 
+				id3.get_album(), 0, chapter_playtime, time2str(total_playtime), 
+				0, find_cover(root)))	
 	return library
 
 def find_cover(path):

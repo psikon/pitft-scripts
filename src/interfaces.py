@@ -36,12 +36,16 @@ class Interface:
 		# create background
 		screen.fill(GREY)
 		screen.blit(self.graphics.load_image(BG_IMG),(0,0))
-		# create three text buttons
+		# create continue playing field
 		self.graphics.continue_playback(screen, 10, 50, 300, 120, 20, 
 			book.get_cover(), book.get_title(), book.get_artist(), 
 			time2str(book.get_total_playtime()))
+		pygame.draw.rect(screen, (233,220,220), 
+            pygame.Rect(10, 187, 300, 1), 1)
+		# add button for library
 		self.graphics.menu_button(screen, "New Book", 10, 190, 48, 48, 
 			30, LIBRARY)
+		# add exit button
 		self.graphics.menu_button(screen, "", 265, 190, 48, 48, 
 			30, EXIT)
 		return screen
@@ -57,15 +61,17 @@ class Interface:
 		right = self.graphics.load_image(RIGHT)
 		select = self.graphics.load_image(SELECT)
 		# draw buttons to screen
-		self.graphics.makeImagebutton(screen, back, 10, 190, 48, 48)
-		self.graphics.makeImagebutton(screen, left, 155, 190, 48, 48)
-		self.graphics.makeImagebutton(screen, right, 210, 190, 48, 48)
-		self.graphics.makeImagebutton(screen, select, 265, 190, 48, 48)
+		pygame.draw.rect(screen, WHITE, 
+            pygame.Rect(10, 187, 300, 1), 1)
+		self.graphics.image_button(screen, back, 10, 190, 48, 48)
+		self.graphics.image_button(screen, left, 155, 190, 48, 48)
+		self.graphics.image_button(screen, right, 210, 190, 48, 48)
+		self.graphics.image_button(screen, select, 265, 190, 48, 48)
 		# update actual audio book informations
 		self.graphics.title(screen, title, 10, 10, 300)
 		self.graphics.artist(screen, artist, 10, 45)
 		self.graphics.play_time(screen, playtime, 10, 100)
-		self.graphics.Cover(screen, cover, 140, 140, 155, 40)  
+		self.graphics.cover(screen, cover, 140, 140, 155, 40)  
 		return screen
 
 	def player_interface(self, screen, title, artist, actualChapter, totalChapter,
@@ -82,18 +88,20 @@ class Interface:
 		play = self.graphics.load_image(PLAY)
 		stop = self.graphics.load_image(STOP)
 		# draw buttons to screen
-		self.graphics.makeImagebutton(screen, back, 10, 190, 48, 48)
-		self.graphics.makeImagebutton(screen, backward, 65, 190, 48, 48)
-		self.graphics.makeImagebutton(screen, forward, 115, 190, 48, 48)
-		self.graphics.makeImagebutton(screen, pause, 165, 190, 48, 48)
-		self.graphics.makeImagebutton(screen, stop, 215, 190, 48, 48)
-		self.graphics.makeImagebutton(screen, play, 265, 190, 48, 48)
+		pygame.draw.rect(screen, WHITE, 
+            pygame.Rect(10, 187, 300, 1), 1)
+		self.graphics.image_button(screen, back, 10, 190, 48, 48)
+		self.graphics.image_button(screen, backward, 65, 190, 48, 48)
+		self.graphics.image_button(screen, forward, 115, 190, 48, 48)
+		self.graphics.image_button(screen, pause, 165, 190, 48, 48)
+		self.graphics.image_button(screen, stop, 215, 190, 48, 48)
+		self.graphics.image_button(screen, play, 265, 190, 48, 48)
 		# update actual audio book informations
 		self.graphics.title(screen, title, 10, 10, 300)
 		self.graphics.artist(screen, artist, 10, 45)
-		self.graphics.Chapter(screen, actualChapter, totalChapter)
-		self.graphics.Cover(screen, cover, 80, 80, 220, 40)
-		self.graphics.PlayBar(screen, playtime, music_pos)
+		self.graphics.chapter(screen, actualChapter, totalChapter, 10, 100)
+		self.graphics.cover(screen, cover, 80, 80, 220, 40)
+		self.graphics.play_bar(screen, playtime, music_pos)
 		return screen
 
 	def exit_interface(self, screen):

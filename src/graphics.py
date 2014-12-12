@@ -14,7 +14,6 @@ DEFAULT_SIZE = 20
 # define colors
 WHITE = (255, 255, 255)
 GREY = (64,64,64)
-LGREY = (223,223,223)
 # define path to images
 BG_IMG = "images/bg_alpha.png"
 LIBRARY = "images/library.png"
@@ -71,7 +70,7 @@ class Graphics:
         screen.blit(self.font.render(text, True, WHITE), 
             (width + 5 + posx, posy + (height-font_size)/2))
 
-    def makeImagebutton(self, screen, image, xpos, ypos, width, height):
+    def image_button(self, screen, image, xpos, ypos, width, height):
         ''' create a button with an image on it'''
         # draw icon
         screen.blit(pygame.transform.scale(image, (width, height)), (xpos, ypos))
@@ -97,7 +96,7 @@ class Graphics:
         self.set_font(DEFAULT_SIZE)
         return screen
 
-    def Cover(self, screen, image, size_x, size_y, xpos, ypos):
+    def cover(self, screen, image, size_x, size_y, xpos, ypos):
         '''load and draw cover to screen'''
         screen.blit(pygame.transform.scale(self.load_image(image), 
             (size_x, size_y)), (xpos, ypos))
@@ -116,7 +115,7 @@ class Graphics:
         screen.blit(self.font.render(artist, True, WHITE), (xpos, ypos + 25))
         return screen
 
-    def PlayBar(self, screen, total, pos):
+    def play_bar(self, screen, total, pos):
         '''add usable playbar to screen showing the progress of audio file'''
         # calculate factor for progress
         factor = str2time(total)/300
@@ -126,18 +125,20 @@ class Graphics:
         screen.blit(self.font.render(time2str(pos) + '/' + total, True, 
             WHITE), (70, 135))
         # draw actual position as moving vertical rectangle to screen
-        pygame.draw.rect(screen, (255,255,255), 
+        pygame.draw.rect(screen, WHITE, 
             pygame.Rect((pos/factor)+10, 160, 5, 25),0)
         # draw actual progress on screen
-        pygame.draw.rect(screen, (255,255,255), 
+        pygame.draw.rect(screen, WHITE, 
             pygame.Rect(10, 165, (pos/factor), 15),0)
         # draw frame of Playbar to screen
-        pygame.draw.rect(screen, (255,255,255), 
+        pygame.draw.rect(screen, WHITE, 
             pygame.Rect(10, 165, 300, 15), 1)
         return screen
 
-    def Chapter(self, screen, actualChapter, totalChapter):
-        screen.blit(self.font.render('Chapter:', True, WHITE), (10, 100))
-        screen.blit(self.font.render(" %d/%d" % (actualChapter, totalChapter), True,
-          WHITE), (85, 100))
+    def chapter(self, screen, actualChapter, totalChapter, xpos, ypos):
+        # draw chapter string
+        screen.blit(self.font.render('Chapter:', True, WHITE), (xpos, ypos))
+        # draw actual and total chapter number
+        screen.blit(self.font.render(" %d/%d" % (actualChapter, totalChapter), 
+            True, WHITE), (xpos + 75, ypos))
         return screen

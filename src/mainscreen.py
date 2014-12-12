@@ -36,11 +36,11 @@ class MainMenu():
         if 10 <= click_pos[0] <= 310 and 50 <= click_pos[1] <= 170:
             self.funcs['Continue'](self.book)
         # go to library screen 
-        if 10 <= click_pos[0] <= 130 and 190 <= click_pos[1] <= 230:
+        if 10 <= click_pos[0] <= 205 and 190 <= click_pos[1] <= 230:
             self.funcs['Select Book']()
         # exit gui
         if 265 <= click_pos[0] <= 315 and 190 <= click_pos[1] <= 230:
-            print "Exit program not yet implemented"
+            self.interface.exit_interface(self.screen)
 
  
     def run(self):
