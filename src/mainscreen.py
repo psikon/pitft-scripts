@@ -17,7 +17,7 @@ YELLOW = (255, 255, 0)
 
 class MainMenu():
     ''''''
-    def __init__(self, screen, funcs, hardware_instance):
+    def __init__(self, screen, funcs, hardware_instance, book):
     	# declare important variables
         self.screen = screen
         # important for framerate
@@ -26,19 +26,22 @@ class MainMenu():
         self.interface = Interface()
         # functions for the menu items
         self.funcs = funcs
+        # cached book for last played window
+        self.book = book
 
     #define function that checks for mouse location
     def on_click(self):
         click_pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
-        #now check to see if button 1 was pressed
-        if 50 <= click_pos[0] <= 270 and 40 <= click_pos[1] <= 90:
-            self.funcs['Continue']()
-        #now check to see if button 2 was pressed
-        if 50 <= click_pos[0] <= 270 and 100 <= click_pos[1] <= 150:
+        # select last played item
+        if 10 <= click_pos[0] <= 310 and 50 <= click_pos[1] <= 170:
+            self.funcs['Continue'](self.book)
+        # go to library screen 
+        if 10 <= click_pos[0] <= 130 and 190 <= click_pos[1] <= 230:
             self.funcs['Select Book']()
-        #now check to see if button 3 was pressed
-        if 50 <= click_pos[0] <= 270 and 160 <= click_pos[1] <= 210:
-            self.funcs['Information']()
+        # exit gui
+        if 265 <= click_pos[0] <= 315 and 190 <= click_pos[1] <= 230:
+            print "Exit program not yet implemented"
+
  
     def run(self):
         '''run method for drawing the screen to dispay'''
@@ -49,7 +52,7 @@ class MainMenu():
             self.clock.tick(30)
             # wait for a pressed button or exit infinity loop
             for event in pygame.event.get():
-                self.interface.main_interface(self.screen)
+                self.interface.main_interface(self.screen, self.book)
                 if event.type == pygame.KEYDOWN:
                     self.set_keyboard_selection(event.key)
                 if event.type == pygame.MOUSEBUTTONDOWN:

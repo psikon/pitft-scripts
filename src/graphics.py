@@ -14,8 +14,10 @@ DEFAULT_SIZE = 20
 # define colors
 WHITE = (255, 255, 255)
 GREY = (64,64,64)
+LGREY = (223,223,223)
 # define path to images
 BG_IMG = "images/bg_alpha.png"
+LIBRARY = "images/library.png"
 PREVIOUS = 'images/previous.png'
 NEXT = 'images/next.png'
 SELECT = 'images/select.png'
@@ -60,24 +62,38 @@ class Graphics:
         # return loaded image
         return image
 
-    def makeTextButton(self, screen, text, posx, posy, width, height, 
-        font_size):
+    def menu_button(self, screen, text, posx, posy, width, height, 
+        font_size, image):
         ''' create a button with an user defined text message'''
         self.set_font(font_size)
-        screen.blit(self.font.render(text, True, WHITE), (posx, posy))
+        screen.blit(pygame.transform.scale(self.load_image(image), 
+            (width, height)), (posx, posy))
+        screen.blit(self.font.render(text, True, WHITE), 
+            (width + 5 + posx, posy + (height-font_size)/2))
 
     def makeImagebutton(self, screen, image, xpos, ypos, width, height):
         ''' create a button with an image on it'''
         # draw icon
         screen.blit(pygame.transform.scale(image, (width, height)), (xpos, ypos))
 
-    def Title(self, screen, string):
+    def continue_playback(self, screen, posx, posy, width, height, font_size, 
+        image, title, artist, playtime):
+        self.set_font(font_size)
+        screen.blit(self.font.render("Continue Playback ?", True, WHITE), (10, 10))
+        screen.blit(pygame.transform.scale(self.load_image(image), 
+            (120, 120)), (10, 65))
+        self.title(screen, title, 10, 40, 300)
+        self.artist(screen, artist, 135, 65)
+        self.play_time(screen, playtime, 135, 120)
+        return screen
+
+    def title(self, screen, string, xpos, ypos, max_size):
         '''generate title field'''
         size = self.size
-        while self.font.size(string)[0] >= 300 and self.size >= 16:
+        while self.font.size(string)[0] >= max_size and self.size >= 16:
             size -= 1
             self.set_font(size)
-        screen.blit(self.font.render(string, True, WHITE), (10, 10))
+        screen.blit(self.font.render(string, True, WHITE), (xpos, ypos))
         self.set_font(DEFAULT_SIZE)
         return screen
 
@@ -87,16 +103,17 @@ class Graphics:
             (size_x, size_y)), (xpos, ypos))
         return screen
 
-    def PlayTime(self, screen, playtime):
+    def play_time(self, screen, playtime, xpos, ypos):
         ''' print playtime to screen'''
-        screen.blit(self.font.render('Time:', True, WHITE), (10, 100))
-        screen.blit(self.font.render(str(playtime) + " min", True, WHITE), (10, 125))
+        screen.blit(self.font.render('Time:', True, WHITE), (xpos, ypos))
+        screen.blit(self.font.render(str(playtime) + " min", True, WHITE), 
+            (xpos, ypos + 25))
         return screen
 
-    def Artist(self, screen, artist):
+    def artist(self, screen, artist, xpos, ypos):
         '''print duration to screen'''
-        screen.blit(self.font.render('Artist:', True, WHITE), (10, 45))
-        screen.blit(self.font.render(artist, True, WHITE), (10, 70))
+        screen.blit(self.font.render('Artist:', True, WHITE), (xpos, ypos))
+        screen.blit(self.font.render(artist, True, WHITE), (xpos, ypos + 25))
         return screen
 
     def PlayBar(self, screen, total, pos):

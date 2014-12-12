@@ -40,10 +40,28 @@ args = parser.parse_args()
 pitft = hardware(args.pi)
 
 # define functions for main menu
-def last_played():
+def last_played(book):
 	'''load the last played song from cache file and go to player 
 	window to resume '''
 	# load cache file
+	player = PlayerInterface(pitft.getScreen(), book)
+	player.run()
+
+def play_window(string):
+	'''load the last played song from cache file and go to player 
+	window to resume '''
+	# load cache file
+	player = PlayerInterface(pitft.getScreen(), string)
+	player.run()
+	
+def book_selector():
+	'''wrapper for media library screen'''
+	bs = Library(pitft.getScreen(), 
+		create_library(os.path.abspath(args.music)), 
+		play_window)
+	bs.run()
+
+def load_cache():
 	progress = load_progress()
 	chapterPlaytime = []
 	totalPlaytime = 0
@@ -55,28 +73,16 @@ def last_played():
 	id3 = ID3Tag(progress[0][0])
 	# create book object with id3 tags and actual position
 	book = Book(progress[0], id3.getTitle(), id3.getArtist(), id3.getAlbum(),
-	 int(progress[1]), chapterPlaytime, totalPlaytime, int(progress[2])/1000, progress[3])
-	player = PlayerInterface(pitft.getScreen(), book)
-	player.run()
-
-def play_window(string):
-	'''wrapper for player window used by library'''
-	player = PlayerInterface(pitft.getScreen(), string)
-	player.run()
-
-def book_selector():
-	'''wrapper for media library screen'''
-	bs = Library(pitft.getScreen(), 
-		create_library(os.path.abspath(args.music)), 
-		play_window)
-	bs.run()
+	 int(progress[1]), chapterPlaytime, totalPlaytime, int(progress[2])/1000, 
+	 progress[3])
+	return book
 
 def main(): 
 	# register main menu functions
 	funcs = {'Continue': last_played,
 			'Select Book': book_selector}
 	# create main menu object
-	main_menu = MainMenu(pitft.getScreen(), funcs, pitft)
+	main_menu = MainMenu(pitft.getScreen(), funcs, pitft, load_cache())
 	# start main menu
 	main_menu.run()
 

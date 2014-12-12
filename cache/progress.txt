@@ -1,6 +1,6 @@
 [Progress]
-path = ['/home/psehnert/workspace/music/example.mp3']
-chapter = 0
-position = 10310
-cover = None
+path = ['/home/psehnert/workspace/music/018_und die Geisterinsel/01 Die drei ___ 18 - und die Geis.mp3', '/home/psehnert/workspace/music/018_und die Geisterinsel/02 Die drei ___ 18 - und die Geis.mp3', '/home/psehnert/workspace/music/018_und die Geisterinsel/03 Die drei ___ 18 - und die Geis.mp3', '/home/psehnert/workspace/music/018_und die Geisterinsel/04 Die drei ___ 18 - und die Geis.mp3']
+chapter = 1
+position = 7980
+cover = /home/psehnert/workspace/music/018_und die Geisterinsel/image.jpg
 

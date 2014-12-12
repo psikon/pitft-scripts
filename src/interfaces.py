@@ -7,39 +7,43 @@ for the generation of every interface screen
 import sys, os, time
 import pygame
 from graphics import Graphics
+from utils import time2str
 
 # define colors
 WHITE = (255, 255, 255)
 GREY = (64,64,64)
 # define path to images
 BG_IMG = "images/bg_alpha.png"
-BACK = 'images/back.png'
-EXIT = 'images/exit.png'
-LEFT = 'images/left.png'
-RIGHT = 'images/right.png'
-SELECT = 'images/select.png'
-NEXT = 'images/next.png'
-PREVIOUS = 'images/previous.png'
-STOP = 'images/stop.png'
-PAUSE = 'images/pause.png'
-PLAY = 'images/play.png'
+LIBRARY = "images/library.ico"
+BACK = 'images/library.ico'
+EXIT = 'images/exit.ico'
+LEFT = 'images/left.ico'
+RIGHT = 'images/right.ico'
+SELECT = 'images/select.ico'
+NEXT = 'images/next.ico'
+PREVIOUS = 'images/previous.ico'
+STOP = 'images/stop.ico'
+PAUSE = 'images/pause.ico'
+PLAY = 'images/play.ico'
 
 class Interface:
 
 	def __init__(self):
 		self.graphics = Graphics()
 
-
-	def main_interface(self, screen):
+	def main_interface(self, screen, book):
 		''' drawing the main interface screen with three menu buttons '''
 		# create background
 		screen.fill(GREY)
 		screen.blit(self.graphics.load_image(BG_IMG),(0,0))
 		# create three text buttons
-		self.graphics.makeTextButton(screen, "Last Played", 
-			50, 20, 220, 55, 40)
-		self.graphics.makeTextButton(screen, "Select Book", 
-			50, 90, 220, 55, 40)
+		self.graphics.continue_playback(screen, 10, 50, 300, 120, 20, 
+			book.get_cover(), book.get_title(), book.get_artist(), 
+			time2str(book.get_total_playtime()))
+		self.graphics.menu_button(screen, "New Book", 10, 190, 48, 48, 
+			30, LIBRARY)
+		self.graphics.menu_button(screen, "", 265, 190, 48, 48, 
+			30, EXIT)
 		return screen
 
 	def list_interface(self, screen, title, artist, playtime, cover):
@@ -53,14 +57,14 @@ class Interface:
 		right = self.graphics.load_image(RIGHT)
 		select = self.graphics.load_image(SELECT)
 		# draw buttons to screen
-		self.graphics.makeImagebutton(screen, back, 10, 190, 45, 45)
-		self.graphics.makeImagebutton(screen, left, 155, 190, 45, 45)
-		self.graphics.makeImagebutton(screen, right, 210, 190, 45, 45)
-		self.graphics.makeImagebutton(screen, select, 265, 190, 45, 45)
+		self.graphics.makeImagebutton(screen, back, 10, 190, 48, 48)
+		self.graphics.makeImagebutton(screen, left, 155, 190, 48, 48)
+		self.graphics.makeImagebutton(screen, right, 210, 190, 48, 48)
+		self.graphics.makeImagebutton(screen, select, 265, 190, 48, 48)
 		# update actual audio book informations
-		self.graphics.Title(screen, title)
-		self.graphics.Artist(screen, artist)
-		self.graphics.PlayTime(screen, playtime)
+		self.graphics.title(screen, title, 10, 10, 300)
+		self.graphics.artist(screen, artist, 10, 45)
+		self.graphics.play_time(screen, playtime, 10, 100)
 		self.graphics.Cover(screen, cover, 140, 140, 155, 40)  
 		return screen
 
@@ -78,15 +82,15 @@ class Interface:
 		play = self.graphics.load_image(PLAY)
 		stop = self.graphics.load_image(STOP)
 		# draw buttons to screen
-		self.graphics.makeImagebutton(screen, back, 10, 190, 45, 45)
-		self.graphics.makeImagebutton(screen, backward, 65, 190, 45, 45)
-		self.graphics.makeImagebutton(screen, forward, 115, 190, 45, 45)
-		self.graphics.makeImagebutton(screen, pause, 165, 190, 45, 45)
-		self.graphics.makeImagebutton(screen, stop, 215, 190, 45, 45)
-		self.graphics.makeImagebutton(screen, play, 265, 190, 45, 45)
+		self.graphics.makeImagebutton(screen, back, 10, 190, 48, 48)
+		self.graphics.makeImagebutton(screen, backward, 65, 190, 48, 48)
+		self.graphics.makeImagebutton(screen, forward, 115, 190, 48, 48)
+		self.graphics.makeImagebutton(screen, pause, 165, 190, 48, 48)
+		self.graphics.makeImagebutton(screen, stop, 215, 190, 48, 48)
+		self.graphics.makeImagebutton(screen, play, 265, 190, 48, 48)
 		# update actual audio book informations
-		self.graphics.Title(screen, title)
-		self.graphics.Artist(screen, artist)
+		self.graphics.title(screen, title, 10, 10, 300)
+		self.graphics.artist(screen, artist, 10, 45)
 		self.graphics.Chapter(screen, actualChapter, totalChapter)
 		self.graphics.Cover(screen, cover, 80, 80, 220, 40)
 		self.graphics.PlayBar(screen, playtime, music_pos)
