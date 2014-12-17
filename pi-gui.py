@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 '''pi-gui is a little GUI based audio player specialised for audio books. The program 
 is optimized for the pitft expansion board to fit inside the pitft resolution. It is 
-capable to play audio books in defined formats, show some facts about them like the cover
-image, scroll through a list of audiobooks and show some system informations about the 
-system. Using pygame library makes the program independent from an running x server.'''
+capable to play audio books in defined formats, show some facts about them, like the 
+cover image and scroll through a list of audiobooks. It saves also automatically the 
+current process, whenn an audio book is stopped. 
+Using pygame library makes the program independent from an running x server.'''
 
 # python libraries
 import sys, os, time
 from argparse import ArgumentParser
 import pygame
-# pi-gui libraries
+# internatl imports
 from src.hardware import hardware
 from src.mainscreen import MainMenu
 from src.library import Library, Book
@@ -40,31 +41,28 @@ args = parser.parse_args()
 pitft = hardware(args.pi)
 
 # define functions for main menu
-def last_played(book):
+def player_window(book):
 	'''load the last played song from cache file and go to player 
 	window to resume '''
-	# load cache file
+	# create player object and start run function
 	player = PlayerInterface(pitft.get_screen(), book)
 	player.run()
-
-def play_window(string):
-	'''load the last played song from cache file and go to player 
-	window to resume '''
-	# load cache file
-	player = PlayerInterface(pitft.get_screen(), string)
-	player.run()
 	
-def book_selector():
+def library_window():
 	'''wrapper for media library screen'''
+	# create Library object and start run function
 	bs = Library(pitft.get_screen(), 
 		create_library(os.path.abspath(args.music)), 
-		play_window)
+		player_window)
 	bs.run()
 
 def load_cache():
+	# load cache file and save values in an array
 	progress = load_progress()
+	# init chapter and total Playtime
 	chapter_playtime = []
 	total_playtime = 0
+	# determine total playtime and create chapter playtime array
 	for item in progress[0]:
 		id3 = ID3Tag(item)
 		total_playtime += str2time(id3.get_playtime())
@@ -79,12 +77,13 @@ def load_cache():
 
 def main(): 
 	# register main menu functions
-	funcs = {'Continue': last_played,
-			'Select Book': book_selector}
+	funcs = {'Continue': player_window,
+			'Select Book': library_window}
 	# create main menu object
 	main_menu = MainMenu(pitft.get_screen(), funcs, pitft, load_cache())
 	# start main menu
 	main_menu.run()
 
 if __name__ == '__main__': 
+	# start the program itself
 	sys.exit(main())

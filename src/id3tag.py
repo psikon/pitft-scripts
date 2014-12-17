@@ -1,5 +1,4 @@
-'''id3tag load from mp3 files the tag informations and 
-save them in a class structure'''
+''' load id3 tags from mp3 files and return the informations'''
 
 # python imports
 import sys, os
@@ -10,20 +9,42 @@ class ID3Tag:
 
 	def  __init__(self, path):
 		# load id3 tags from file
-		self.id3 = eyeD3.Mp3AudioFile(path)
-
+		try:
+			self.id3 = eyeD3.Mp3AudioFile(path)
+		except IOerror:
+			print "Library is empty"
 
 	def get_title(self):
-		return self.id3.tag.getTitle()
+		''' access title slot '''
+		try:
+			return self.id3.tag.getTitle()
+		except: 
+			return "No item in library"
 
 	def get_album(self):
-		return self.id3.tag.getAlbum()
+		''' access album slot '''
+		try:
+			return self.id3.tag.getAlbum()
+		except:
+			return "No item in library"
 
 	def get_artist(self):
-		return self.id3.tag.getArtist()
+		''' access artist slot '''
+		try:
+			return self.id3.tag.getArtist()
+		except:
+			return "No item in library"
 
 	def get_playtime(self):
-		return self.id3.getPlayTimeString()
+		''' access playtime slot '''
+		try:
+			return self.id3.getPlayTimeString()
+		except: 
+			print "No item in library"
 
 	def get_year(self):
-		return self.id3.getYear()
+		''' access year slot '''
+		try:
+			return self.id3.getYear()
+		except:
+			return "No item in library"

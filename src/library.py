@@ -1,13 +1,13 @@
 #!/usr/bin/env python
-'''bibliothek creates a screen for selecting the ebooks from a list by showing 
+'''library creates a screen for selecting the audio books from a list by showing 
 the name, cover and supplemental informations on the screen. The books are scrollable 
-with the cursor or pitft touchscreen'''
+by buttons which can be used by the cursor or pitft touchscreen'''
 
 # python imports
 import sys, os
 import pygame
 import eyeD3
-# pi-gui imports
+# internal imports
 from interfaces import Interface
 from id3tag import ID3Tag
 from book import Book
@@ -16,7 +16,7 @@ from utils import pressed
 YELLOW = (255, 255, 0)
 
 class Library:
-    '''generate a library screen for scrolling through the audiobooks'''
+    '''generate a library screen for scrolling through the audio books'''
 
     def __init__(self, screen, library, function):
         # define screen variables

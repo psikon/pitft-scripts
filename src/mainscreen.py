@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-
 '''
-Generate the main window for the pi-gui program. The class generate a menu for the start
-screen and add control options for the cursor keys and the pitft buttons.
+Generate the main window for the pi-gui program. The interface show the last played 
+item with cover, title and supllemental informations that is interactive 
+and two buttons for show up the library screen and exit the porgram itself. 
 '''
 #@author: Philipp Sehnert
 #@contact: philipp.sehnert[a]gmail.com
@@ -10,13 +10,13 @@ screen and add control options for the cursor keys and the pitft buttons.
 # python imports
 import sys, os
 import pygame
-# pi-gui imports
+# internal imports
 from interfaces import Interface
 
 YELLOW = (255, 255, 0)
 
 class MainMenu():
-    ''''''
+    ''' generate the start interface for accessing all other screens'''
     def __init__(self, screen, funcs, hardware_instance, book):
     	# declare important variables
         self.screen = screen
@@ -42,7 +42,6 @@ class MainMenu():
         if 265 <= click_pos[0] <= 315 and 190 <= click_pos[1] <= 230:
             self.interface.exit_interface(self.screen)
 
- 
     def run(self):
         '''run method for drawing the screen to dispay'''
         mainloop = True
@@ -53,8 +52,7 @@ class MainMenu():
             # wait for a pressed button or exit infinity loop
             for event in pygame.event.get():
                 self.interface.main_interface(self.screen, self.book)
-                if event.type == pygame.KEYDOWN:
-                    self.set_keyboard_selection(event.key)
+                # recognize mouse and touchscreen activity
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
                     pygame.draw.circle(self.screen, YELLOW, pos, 10, 0)

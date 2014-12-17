@@ -6,7 +6,7 @@ audio book and show the player interface on screen.
 # import python libraries
 import sys, os
 import pygame
-# import pi-gui libraries
+# internal imports
 from interfaces import Interface
 from music import Player
 from utils import pressed, timer
@@ -18,16 +18,16 @@ class PlayerInterface:
     def __init__(self, screen, book):
       self.screen = screen
       self.clock = pygame.time.Clock()
+      # init interface 
       self.interface = Interface()
+      # init books
       self.book = book
+      # init the player 
       self.music = Player(self.book)
-      
-    def __del__(self):
-      pass
 
     def on_click(self):
-      '''recognize touchscreen and mouse selections to 
-      run functionalities of buttons'''
+      ''' recognize touchscreen and mouse selections to 
+      run functionalities of buttons '''
       click_pos = pressed()
       # stop music and return to previous screen
       if 10 <= click_pos[0] <= 55 and 190 <= click_pos[1] <= 235:
@@ -66,6 +66,7 @@ class PlayerInterface:
           self.music.get_pos(), self.book.get_cover())
         for event in pygame.event.get():
           if event.type == pygame.USEREVENT:
+            # start playing next chapter when a song ends
             self.music.next_chapter()
           # wait for touchscreen pressed
           if event.type == pygame.MOUSEBUTTONDOWN:

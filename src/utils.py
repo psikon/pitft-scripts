@@ -1,5 +1,5 @@
 '''
-utils contain various methods needed for the functionalies of the main program,
+utils contain various methods needed for the functionalities of the main program,
 that do not fit in some of the classes or need to accessed by various class without
 creating a new object or load the complete class object
 '''
@@ -9,9 +9,10 @@ import sys, os
 import pygame
 # needed for save methods
 import ConfigParser
-from threading import Timer
 from id3tag import ID3Tag
 from book import Book
+# needed for timer
+from threading import Timer
 
 def str2time(string):
 	''' converts a string into an integer of milliseconds '''
@@ -35,16 +36,16 @@ def time2str(time):
 
 def save_progress(path, chapter, position, cover):
 	''' save the progress of an audiobook after stop to a file containing 
-	path and actual position at stop '''
+	path, actual position, actual chapter and path to cover image at stop '''
 	# create new config parser object
 	Config = ConfigParser.ConfigParser()
 	# open the save file in write mode
-	progress = open('cache/progress.txt','w')
+	progress = open('cache/progress.txt', 'w')
 	# create section and arguments
 	Config.add_section('Progress')
-	Config.set('Progress','path', path)
+	Config.set('Progress', 'path', path)
 	Config.set('Progress', 'chapter', chapter)
-	Config.set('Progress','position', position)
+	Config.set('Progress', 'position', position)
 	Config.set('Progress', 'cover', cover)
 	# write settings to file
 	Config.write(progress)
@@ -58,11 +59,11 @@ def load_progress():
 	Config = ConfigParser.ConfigParser()
 	# read the cache file
 	Config.read('cache/progress.txt')
-	# extract path. chapter, position and path to cover
-	path = Config.get('Progress','path').translate(None, "'[]").split(', ')
-	chapter = Config.get('Progress','chapter')
+	# extract path, chapter, position and path to cover
+	path = Config.get('Progress', 'path').translate(None, "'[]").split(', ')
+	chapter = Config.get('Progress', 'chapter')
 	position = Config.get('Progress', 'position')
-	cover = Config.get('Progress','cover')
+	cover = Config.get('Progress', 'cover')
 	return [path, chapter, position, cover]
 
 def timeout():
@@ -74,8 +75,8 @@ def timer():
 	t.start
 
 def create_library(music_folder):
-	'''walk through the music folder, searching for audio books and 
-	their chapters and create a library of all audio books'''
+	''' walk through the music folder, searching for audio books and 
+	their chapters and create a library of all audio books '''
 	# init empty library
 	library = []
 	# walk through the music folder
@@ -104,7 +105,11 @@ def create_library(music_folder):
 			# add audio book to library
 			library.append(Book(chapter, id3.get_title(), id3.get_artist(), 
 				id3.get_album(), 0, chapter_playtime, time2str(total_playtime), 
-				0, find_cover(root)))	
+				0, find_cover(root)))
+	# library is empty return an empty Book 
+	if not library:
+		library.append(Book("", "Music folder is empty!", "None", "", 0, 0, 
+			0, 0, "images/unknown.png"))
 	return library
 
 def find_cover(path):

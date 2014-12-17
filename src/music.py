@@ -7,19 +7,20 @@ module including the functionalities for the play bar
 import sys, os
 import pygame
 
-# pi-gui imports
+# internal imports
 from interfaces import Interface
 from utils import save_progress, str2time, timer
 
+# action when a played song finish
 NEXT_CHAPTER = pygame.USEREVENT
 
 class Player:
-
 
 	def __init__(self, book):
 		# init the mixer of pygame module
 		self.mixer = pygame.mixer
 		self.mixer.init()
+		# init the interface module
 		self.interface = Interface()
 		# load actual audio book object
 		self.book = book
@@ -38,7 +39,7 @@ class Player:
 		self.playing = bool
 
 	def play(self):
-		''' play or stop the music depending on play status '''
+		''' start playing '''
 		pygame.mixer.music.set_endevent(pygame.USEREVENT)
 		self.play_next_chapter()
 
@@ -54,8 +55,10 @@ class Player:
 	def stop(self):
 		''' stop actual playing an store path and position to cache file '''
 		self.set_status(False)
+		# save to cache file
 		save_progress(self.book.get_path(), self.get_chapter(), 
 			pygame.mixer.music.get_pos(), self.book.get_cover())
+		# stop the music
 		pygame.mixer.music.stop()
 
 	def get_pos(self):
@@ -72,9 +75,11 @@ class Player:
 		self.play_next_chapter()
 
 	def get_chapter(self):
+		''' get actual played chapter '''
 		return self.chapter
 
 	def previous_chapter(self):
+		''' select previous chapter '''
 		if not self.chapter == 0: 
 			self.chapter -= 1
 			self.position = 0
@@ -83,6 +88,7 @@ class Player:
 			self.stop()
 		
 	def next_chapter(self):
+		''' select next chapter '''
 		if not self.chapter == len(self.book.get_path()) - 1: 
 			self.chapter += 1
 			self.position = 0
@@ -91,5 +97,6 @@ class Player:
 			self.stop()
 
 	def play_next_chapter(self):
+		''' play the next chapter in path array at the selected position'''
 		self.mixer.music.load(self.book.get_path()[self.get_chapter()])
 		self.mixer.music.play(1, self.position)
