@@ -57,22 +57,33 @@ def library_window():
 	bs.run()
 
 def load_cache():
-	# load cache file and save values in an array
-	progress = load_progress()
-	# init chapter and total Playtime
-	chapter_playtime = []
-	total_playtime = 0
-	# determine total playtime and create chapter playtime array
-	for item in progress[0]:
-		id3 = ID3Tag(item)
-		total_playtime += str2time(id3.get_playtime())
-		chapter_playtime.append(id3.get_playtime())
-	# create id3tag object
-	id3 = ID3Tag(progress[0][0])
-	# create book object with id3 tags and actual position
-	book = Book(progress[0], id3.get_title(), id3.get_artist(), id3.get_album(),
-	 int(progress[1]), chapter_playtime, total_playtime, int(progress[2])/1000, 
-	 progress[3])
+	# declare cache file and empty book
+	cache_file = 'cache/progress.txt'
+	empty = Book(None, "No book previously played", None, None, 0, 0, 0 , 0 , None)
+	# test for existent cache file
+	if os.path.isfile(cache_file): 
+		# load cache file and save values in an array
+		progress = load_progress(cache_file)
+		# is progress path correctly?
+		if not progress is None:
+			# init chapter and total Playtime
+			chapter_playtime = []
+			total_playtime = 0
+			# determine total playtime and create chapter playtime array
+			for item in progress[0]:
+				id3 = ID3Tag(item)
+				total_playtime += str2time(id3.get_playtime())
+				chapter_playtime.append(id3.get_playtime())
+			# create id3tag object
+			id3 = ID3Tag(progress[0][0])
+			# create book object with id3 tags and actual position
+			book = Book(progress[0], id3.get_title(), id3.get_artist(), id3.get_album(),
+			int(progress[1]), chapter_playtime, total_playtime, int(progress[2])/1000, 
+			progress[3])
+		else:
+			book = empty
+	else:
+		book = empty
 	return book
 
 def main(): 

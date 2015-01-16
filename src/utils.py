@@ -52,19 +52,21 @@ def save_progress(path, chapter, position, cover):
 	# close file
 	progress.close()
 	
-def load_progress():
+def load_progress(cache):
 	''' load the progress of an audiobook from file and return needed informations 
 	for creating a new Book object '''
 	# load Config Parser
 	Config = ConfigParser.ConfigParser()
 	# read the cache file
-	Config.read('cache/progress.txt')
+	Config.read(cache)
 	# extract path, chapter, position and path to cover
 	path = Config.get('Progress', 'path').translate(None, "'[]").split(', ')
-	chapter = Config.get('Progress', 'chapter')
-	position = Config.get('Progress', 'position')
-	cover = Config.get('Progress', 'cover')
-	return [path, chapter, position, cover]
+	if os.path.isfile(path[0]):
+		return [path, Config.get('Progress', 'chapter'), 
+			Config.get('Progress', 'position'),
+			Config.get('Progress', 'cover') ]
+	else:
+		return None
 
 def timeout():
 	print "game over"
