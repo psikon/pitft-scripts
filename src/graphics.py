@@ -7,7 +7,7 @@ graphic fields and all items needed for drawing the interfaces to screen
 import sys, os, time
 import pygame
 # internal imports
-from utils import str2time, time2str
+from utils import str2time, time2str, get_time, get_date
 
 # define default font
 DEFAULT_FONT = 'Arial'
@@ -79,20 +79,25 @@ class Graphics:
         ''' create a button with an image on it'''
         # draw icon
         screen.blit(pygame.transform.scale(image, (width, height)), (xpos, ypos))
+    
+    def clock(self, screen):
+        self.set_font(65)
+        screen.blit(self.font.render(get_time(), True, WHITE), (80, 10))
+        self.set_font(35)
+        screen.blit(self.font.render(get_date(), True, WHITE), (70, 80))
+
 
     def continue_playback(self, screen, posx, posy, width, height, font_size, 
-        image, title, artist, playtime):
+        image, title):
         ''' create a little information field about the last played item ''' 
         # set new font size
         self.set_font(font_size)
         # draw title on field
-        screen.blit(self.font.render("Continue Playback ?", True, WHITE), (10, 10))
+        screen.blit(self.font.render("Continue Playback ?", True, WHITE), (10, 130))
         # draw some informations about last playback
         screen.blit(pygame.transform.scale(self.load_image(image), 
-            (110, 110)), (10, 65))
-        self.title_field(screen, title, 10, 40, 300)
-        self.artist_field(screen, artist, 135, 65)
-        self.play_time_field(screen, playtime, 135, 120)
+            (50, 50)), (260, 130))
+        self.title_field(screen, title, 10, 160, 250)
         return screen
 
     def title_field(self, screen, string, xpos, ypos, max_size):
@@ -156,8 +161,8 @@ class Graphics:
             True, WHITE), (xpos + 75, ypos))
         return screen
 
-    def seperator_line(self, screen):
+    def seperator_line(self, screen, pos = 187):
         ''' draw a WHITE seperator line for dividing the interface and the 
         navigation buttons '''
-        pygame.draw.rect(screen, WHITE, pygame.Rect(10, 187, 300, 1), 1)
+        pygame.draw.rect(screen, WHITE, pygame.Rect(10, pos, 300, 1), 1)
         return screen

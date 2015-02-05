@@ -39,9 +39,10 @@ class Interface:
 		screen.fill(GREY)
 		screen.blit(self.graphics.load_image(BG_IMG), (0, 0))
 		# create continue playing field
-		self.graphics.continue_playback(screen, 10, 50, 300, 120, 20, 
-			book.get_cover(), book.get_title(), book.get_artist(), 
-			time2str(book.get_total_playtime()))
+		self.graphics.clock(screen)
+		self.graphics.seperator_line(screen, 120)
+		self.graphics.continue_playback(screen, 200, 50, 300, 120, 20, 
+			book.get_cover(), book.get_title())
 		# add seperator line
 		self.graphics.seperator_line(screen)
 		# add button for library

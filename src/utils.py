@@ -7,12 +7,14 @@ creating a new object or load the complete class object
 # import python libraries
 import sys, os
 import pygame
+from time import gmtime, strftime
 # needed for save methods
 import ConfigParser
 from id3tag import ID3Tag
 from book import Book
 # needed for timer
 from threading import Timer
+
 
 def str2time(string):
 	''' converts a string into an integer of milliseconds '''
@@ -33,6 +35,12 @@ def time2str(time):
 	# convert to hours
 	h,m = divmod(m, 60)
 	return '%d:%d:%d' % (h,m,s)
+
+def get_time():
+	return strftime("%H:%M")
+
+def get_date():
+	return strftime('%d %b %Y')
 
 def save_progress(path, chapter, position, cover):
 	''' save the progress of an audiobook after stop to a file containing 
