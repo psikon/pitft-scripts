@@ -15,7 +15,6 @@ from src.hardware import hardware
 from src.mainscreen import MainMenu
 from src.library import Library, Book
 from src.player import PlayerInterface
-from src.systeminfo import InfoScreen
 from src.id3tag import ID3Tag
 from src.utils import load_progress, create_library, str2time
 
@@ -92,9 +91,18 @@ def main():
 			'Select Book': library_window}
 	# create main menu object
 	main_menu = MainMenu(pitft.get_screen(), funcs, pitft, load_cache())
-	# start main menu
-	main_menu.run()
-
+	# because of pitft framebuffer error, that cause a blank screen before the touchscreen is
+	# pressed first, we have to create an initial start screen with a little message
+	while True:
+		pygame.display.update()
+		font = pygame.font.SysFont("Arial", 30)
+		pitft.get_screen().blit(font.render("Press Screen to Start!", True, (255,255,255)), 
+			(10, 100))
+		for event in pygame.event.get():
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				# start main menu
+				main_menu.run()
+                    
 if __name__ == '__main__': 
 	# start the program itself
 	sys.exit(main())

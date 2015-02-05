@@ -11,7 +11,7 @@ class ID3Tag:
 		# load id3 tags from file
 		try:
 			self.id3 = eyeD3.Mp3AudioFile(path)
-		except IOerror:
+		except IOError:
 			print "Library is empty"
 
 	def get_title(self):
