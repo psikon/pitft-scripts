@@ -33,7 +33,7 @@ class MainMenu():
     def on_click(self):
         click_pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
         # select last played item
-        if 10 <= click_pos[0] <= 310 and 50 <= click_pos[1] <= 170:
+        if 10 <= click_pos[0] <= 310 and 120 <= click_pos[1] <= 185:
             self.funcs['Continue'](self.book)
         # go to library screen 
         if 10 <= click_pos[0] <= 205 and 190 <= click_pos[1] <= 230:
@@ -49,9 +49,9 @@ class MainMenu():
         while mainloop:
             # Limit frame speed to 30 FPS
             self.clock.tick(30)
+            self.interface.main_interface(self.screen, self.book)
             # wait for a pressed button or exit infinity loop
             for event in pygame.event.get():
-                self.interface.main_interface(self.screen, self.book)
                 # recognize mouse and touchscreen activity
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pos = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
